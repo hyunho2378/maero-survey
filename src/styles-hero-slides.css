@@ -1,0 +1,232 @@
+/*
+ * 히어로 장면 슬라이드 3장.
+ * main.jsx에서 styles-hero.css 다음, styles-survey.css 앞에 불러옵니다.
+ *
+ * - 전환은 opacity만 써요. 장면 배경 이동은 기존 hero-scene-drift를 그대로 써요.
+ * - 나가는 장면은 700ms 동안 불투명으로 아래에 남고, 들어오는 장면이 그 위에서 서서히 나타나요.
+ *   그래서 중간에 배경이 비치거나 어두워지는 깜빡임이 없어요.
+ * - 안 보이는 장면은 display를 건드리지 않고 visibility만 숨겨서 3D 그림이 그대로 남아 있어요.
+ */
+
+/* 변수: --glass-* 가 있으면 재사용하고, 없을 때만 아래 값이 쓰여요 */
+
+:root body .hero {
+  --slide-fade: 700ms;
+  --slide-filter: var(--glass-filter, blur(16px) saturate(1.4));
+  --slide-rim: var(--glass-rim, inset 0 1px 0 color-mix(in srgb, var(--white) 90%, transparent));
+  --slide-rim-tint: var(--glass-rim-tint, inset 0 1px 0 color-mix(in srgb, var(--white) 90%, transparent));
+  --slide-shadow: var(--glass-shadow, 0 8px 24px color-mix(in srgb, var(--night) 28%, transparent));
+  --slide-tint-shadow: var(--glass-tint-shadow, 0 4px 12px color-mix(in srgb, var(--night) 24%, transparent));
+  --slide-press: var(--glass-press, 120ms ease);
+}
+
+/* 장면 배경: 세 장을 같은 자리에 겹쳐요 */
+
+:root body .hero .hero-scene.hero-scene-slide {
+  z-index: -1;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0s linear var(--slide-fade),
+    visibility 0s linear var(--slide-fade);
+}
+
+:root body .hero .hero-scene.hero-scene-slide[data-active="true"] {
+  z-index: 0;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--slide-fade) ease,
+    visibility 0s linear 0s;
+}
+
+/* 슬라이드 묶음: 세 장이 같은 칸에 겹쳐서 높이가 바뀌지 않아요 */
+
+:root body .hero .hero-slides {
+  position: relative;
+  isolation: isolate;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: grid;
+  align-self: center;
+  inline-size: 100%;
+  min-inline-size: 0;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+:root body .hero .hero-slide {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  align-items: center;
+  column-gap: clamp(1.5rem, 4vw, 4rem);
+  inline-size: 100%;
+  min-inline-size: 0;
+  z-index: 1;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  transition:
+    opacity 0s linear var(--slide-fade),
+    visibility 0s linear var(--slide-fade);
+}
+
+:root body .hero .hero-slide[data-active="true"] {
+  z-index: 2;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity var(--slide-fade) ease,
+    visibility 0s linear 0s;
+}
+
+/* 하단 조작 칩 (리퀴드 글래스) */
+
+:root body .hero .hero-bottom .hero-slide-controls {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0.375rem;
+  border-radius: var(--glass-radius);
+  background: var(--hero-fill);
+  color: var(--ink);
+  -webkit-backdrop-filter: var(--slide-filter);
+  backdrop-filter: var(--slide-filter);
+  box-shadow: var(--slide-rim), var(--slide-shadow);
+  word-break: keep-all;
+}
+
+:root body .hero .hero-slide-dots {
+  display: flex;
+  align-items: center;
+}
+
+:root body .hero .hero-slide-controls svg {
+  display: block;
+  pointer-events: none;
+}
+
+/* 이전, 다음, 일시정지: 44px 이상 */
+
+:root body .hero .hero-slide-controls .hero-slide-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: 44px;
+  block-size: 44px;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--white);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: var(--slide-rim-tint), var(--slide-tint-shadow);
+  transition: transform var(--slide-press);
+}
+
+:root body .hero .hero-slide-controls .hero-slide-button-pause {
+  background: var(--red);
+}
+
+@media (hover: hover) {
+  :root body .hero .hero-slide-controls .hero-slide-button:hover {
+    transform: translateY(-2px);
+  }
+}
+
+:root body .hero .hero-slide-controls .hero-slide-button:active {
+  transform: scale(0.97);
+}
+
+/* 점: 보이는 크기는 작고 누르는 영역은 44px */
+
+:root body .hero .hero-slide-controls .hero-slide-dot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: 44px;
+  block-size: 44px;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root body .hero .hero-slide-dot-mark {
+  display: block;
+  inline-size: 10px;
+  block-size: 10px;
+  border-radius: var(--glass-radius);
+  background: var(--ink);
+  transition: transform var(--slide-press);
+}
+
+/* 현재 장면: 긴 알약 모양에 파란색 */
+:root body .hero .hero-slide-controls .hero-slide-dot[aria-current="true"] .hero-slide-dot-mark {
+  inline-size: 28px;
+  background: var(--blue);
+}
+
+:root body .hero .hero-slide-controls .hero-slide-dot:active .hero-slide-dot-mark {
+  transform: scale(0.85);
+}
+
+/* 키보드 포커스 표시: 선 장식 대신 이중 그림자 고리.
+   투명 outline은 강제 색상 모드에서만 보여요. */
+
+:root body .hero .hero-slide-controls .hero-slide-button:focus-visible,
+:root body .hero .hero-slide-controls .hero-slide-dot:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 2px var(--white),
+    0 0 0 5px var(--ink);
+}
+
+/* 모바일: 하단 막대는 한 줄에 하나씩 세로로 쌓여요 (기존 .hero-bottom column) */
+
+@media (max-width: 767px) {
+  :root body .hero .hero-slides {
+    grid-row: auto;
+    align-self: start;
+  }
+
+  :root body .hero .hero-slide {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    row-gap: 1.25rem;
+  }
+}
+
+/* 움직임 줄이기: 크로스페이드와 눌림 효과 모두 즉시 */
+
+@media (prefers-reduced-motion: reduce) {
+  :root body .hero .hero-scene.hero-scene-slide,
+  :root body .hero .hero-slide,
+  :root body .hero .hero-slide-controls .hero-slide-button,
+  :root body .hero .hero-slide-dot-mark {
+    transition: none !important;
+  }
+}

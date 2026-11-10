@@ -1,0 +1,347 @@
+/*
+ * 세계관 컷 구간: 밝은 바닥색 + 큰 그림 카드 + 글래스 글 패널.
+ * main.jsx에서 styles-keepsakes.css 다음에 불러옵니다.
+ * 변수는 styles-keepsakes.css에서 쓰는 것만 씁니다.
+ * 움직임은 transform, opacity만 사용합니다.
+ * border, outline으로 만든 선과 옆 강조 막대는 쓰지 않습니다. 포커스 표시는 styles-a11y.css가 맡습니다.
+ * 글자 굵기는 400, 500, 600만 씁니다.
+ * 글 패널은 그림의 가장자리와 겹치지만, 글자는 그림 바깥 영역에서 시작합니다.
+ */
+
+/* 구간 바닥: 밝은 색, 글래스 흰색 비율을 높여 글자 대비를 지킴 */
+:root body .worldview-section {
+  --glass-clear: color-mix(in srgb, var(--white) 90%, transparent);
+  --glass-regular: color-mix(in srgb, var(--white) 92%, transparent);
+  --glass-strong: color-mix(in srgb, var(--white) 94%, transparent);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  overflow: clip;
+  background: var(--white);
+  color: var(--night);
+}
+
+/* 한국어 줄바꿈: 구절 단위 */
+:root body .worldview-section,
+:root body .worldview-section * {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 장식 원: 글래스 뒤로 색이 비치도록 바닥에만 둠 */
+:root body .worldview-section::before,
+:root body .worldview-section::after {
+  position: absolute;
+  z-index: -1;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+:root body .worldview-section::before {
+  inset-block-start: -4rem;
+  inset-inline-start: -4rem;
+  inline-size: clamp(9rem, 20vw, 16rem);
+  background: var(--red);
+}
+
+:root body .worldview-section::after {
+  inset-block-end: -5rem;
+  inset-inline-end: -4rem;
+  inline-size: clamp(10rem, 24vw, 18rem);
+  background: var(--blue);
+}
+
+/* 안쪽 흐름 */
+:root body .worldview-section > .container {
+  display: grid;
+  gap: var(--k-space-8, 2rem);
+  min-inline-size: 0;
+}
+
+/* 머리말 글래스 카드 */
+:root body .worldview-section .worldview-heading {
+  inline-size: min(100%, var(--k-reading-max, 42rem));
+  margin: 0;
+  padding: var(--k-card-pad, 1.5rem);
+  border: 0;
+  border-radius: 28px;
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .worldview-section .worldview-heading :is(h3, p, .eyebrow) {
+  margin-block: 0;
+  color: var(--night);
+  text-wrap: balance;
+}
+
+:root body .worldview-section .worldview-heading .worldview-eyebrow {
+  margin-block-end: var(--k-space-3, 0.75rem);
+  border: 0;
+  background: transparent;
+  font-weight: 600;
+}
+
+:root body .worldview-section .worldview-heading h3 {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+:root body .worldview-section .worldview-heading .worldview-lead {
+  margin-block-start: var(--k-space-3, 0.75rem);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* 장면 목록: 위에서 아래로 한 장씩 */
+:root body .worldview-section .worldview-list {
+  display: grid;
+  gap: var(--k-space-8, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:root body .worldview-section .worldview-list > li {
+  display: block;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* 큰 카드: 기본은 그림 위, 글 아래 1열 */
+:root body .worldview-section .worldview-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: 100%;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--night);
+}
+
+/* 그림: 1600:1194, 사진 위에는 글자를 올리지 않음 */
+:root body .worldview-section .worldview-media {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  min-inline-size: 0;
+  aspect-ratio: 1600 / 1194;
+  border-radius: 28px;
+  background: var(--white);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+}
+
+:root body .worldview-section .worldview-photo {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  max-inline-size: none;
+  max-block-size: none;
+  aspect-ratio: 1600 / 1194;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+  transform: none;
+}
+
+/* 그림을 불러오지 못했을 때의 안내 칸 */
+:root body .worldview-section .worldview-photo.artwork-unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: var(--k-space-4, 1rem);
+  background: var(--red);
+  color: var(--night);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/*
+ * 글래스 글 패널: 그림 아래 가장자리와 살짝 겹침.
+ * 겹친 만큼 위쪽 안쪽 여백을 늘려 글자는 그림 밖에서 시작합니다.
+ */
+:root body .worldview-section .worldview-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-inline-size: 0;
+  margin-block: -1.5rem 0;
+  margin-inline: 0.75rem;
+  padding: calc(var(--k-card-pad, 1.5rem) + 1.5rem) var(--k-card-pad, 1.5rem)
+    var(--k-card-pad, 1.5rem);
+  border: 0;
+  border-radius: 28px;
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .worldview-section .worldview-panel :is(h4, p) {
+  margin: 0;
+  color: var(--night);
+  text-wrap: balance;
+}
+
+:root body .worldview-section .worldview-panel h4 {
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+:root body .worldview-section .worldview-panel p {
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* 작은 칩 */
+:root body .worldview-section .worldview-chip {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.75rem;
+  padding-inline: 0.75rem;
+  border: 0;
+  border-radius: 24px;
+  background: var(--red);
+  color: var(--night);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* 설문으로 가는 버튼형 링크: 누르는 영역 44px 이상 */
+:root body .worldview-section .worldview-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  justify-self: start;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-block-size: 44px;
+  padding: 0.75rem 1.5rem;
+  border: 0;
+  border-radius: 28px;
+  background: var(--night);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  text-wrap: balance;
+  transition: transform var(--glass-press, 180ms ease-out);
+}
+
+/* 눌림: scale 0.97 */
+:root body .worldview-section .worldview-link:active {
+  transform: scale(0.97);
+}
+
+/* 1024px 이상: 그림이 왼쪽, 오른쪽, 왼쪽으로 번갈아 놓임 */
+@media (min-width: 1024px) {
+  :root body .worldview-section .worldview-card {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  :root body .worldview-section .worldview-media {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* 홀수 장면: 그림 왼쪽, 글 오른쪽. 그림 오른쪽 가장자리와 2rem 겹침 */
+  :root body .worldview-section .worldview-panel {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    margin-inline-start: -2rem;
+    padding: var(--k-card-pad, 1.5rem);
+    padding-inline-start: calc(var(--k-card-pad, 1.5rem) + 2rem);
+  }
+
+  /* 짝수 장면: 그림 오른쪽, 글 왼쪽. 그림 왼쪽 가장자리와 2rem 겹침 */
+  :root body .worldview-section .worldview-list > li:nth-child(even) .worldview-card {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  }
+
+  :root body .worldview-section .worldview-list > li:nth-child(even) .worldview-media {
+    grid-column: 2;
+  }
+
+  :root body .worldview-section .worldview-list > li:nth-child(even) .worldview-panel {
+    grid-column: 1;
+    margin-inline: 0;
+    margin-inline-end: -2rem;
+    padding: var(--k-card-pad, 1.5rem);
+    padding-inline-end: calc(var(--k-card-pad, 1.5rem) + 2rem);
+  }
+}
+
+/* 768px 이하: 1열, 가로 스크롤 없음, 링크는 가로 전체 */
+@media (max-width: 768px) {
+  :root body .worldview-section .worldview-link {
+    justify-self: stretch;
+    inline-size: 100%;
+  }
+}
+
+/* 움직임 줄이기: 애니메이션, 전환, hover, focus 변화를 모두 끔 */
+@media (prefers-reduced-motion: reduce) {
+  :root body .worldview-section,
+  :root body .worldview-section *,
+  :root body .worldview-section *::before,
+  :root body .worldview-section *::after,
+  :root body .worldview-section::before,
+  :root body .worldview-section::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  :root body .worldview-section .worldview-link:hover,
+  :root body .worldview-section .worldview-link:focus-visible,
+  :root body .worldview-section .worldview-link:active {
+    transform: none !important;
+  }
+}
+
+/* 강제 색상 모드 */
+@media (forced-colors: active) {
+  :root body .worldview-section::before,
+  :root body .worldview-section::after {
+    display: none;
+  }
+
+  :root body .worldview-section :is(.worldview-heading, .worldview-panel) {
+    background: Canvas;
+    color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  :root body .worldview-section .worldview-link {
+    background: ButtonFace;
+    color: ButtonText;
+  }
+}

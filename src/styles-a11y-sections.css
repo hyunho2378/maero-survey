@@ -1,0 +1,127 @@
+/*
+ * 세 구간(소품 시안, 세계관 컷, 웹툰) 추가 접근성 보강.
+ * 대상: .keepsakes-section, .worldview-section, .webtoon-section
+ * 다루는 설정: prefers-contrast: more, forced-colors: active
+ * 기존 클래스 이름만 쓰고 새 클래스는 만들지 않습니다.
+ * border와 옆 강조 막대는 만들지 않습니다. outline은 forced-colors 윤곽에만 씁니다.
+ * 글자 굵기는 기존 값(400, 500, 600)을 그대로 두고 새로 지정하지 않습니다.
+ * 선택자의 :root 반복은 불러오는 순서와 상관없이 기존 규칙보다 우선하게 하기 위함입니다.
+ * 포커스 표시는 styles-a11y.css가 맡으므로 링크의 outline은 건드리지 않습니다.
+ */
+
+/* 한국어 줄바꿈: 구절 단위 유지 */
+:root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section),
+:root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section) * {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* ───────── 1. 대비 높이기 ───────── */
+@media (prefers-contrast: more) {
+  /* 구간 안의 글래스 재질 값을 불투명 흰색으로 */
+  :root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section) {
+    --glass-clear: var(--white);
+    --glass-regular: var(--white);
+    --glass-strong: var(--white);
+    background: var(--white);
+    color: var(--ink);
+  }
+
+  /* 머리말 카드, 사진 카드, 설명 패널: 불투명 흰색, 블러와 그림자 제거 */
+  :root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section)
+    :is(
+      .keepsakes-heading,
+      .keepsake-card,
+      .worldview-heading,
+      .worldview-panel,
+      .webtoon-heading,
+      .webtoon-panel
+    ) {
+    background: var(--white);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    color: var(--ink);
+  }
+
+  /* 카드와 패널 안의 글자: 남색 */
+  :root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section)
+    :is(
+      .keepsakes-heading,
+      .keepsake-card,
+      .worldview-heading,
+      .worldview-panel,
+      .webtoon-heading,
+      .webtoon-panel
+    )
+    :is(h3, h4, p, span, li, strong, em, small) {
+    color: var(--ink);
+  }
+
+  /* 칩: 노란 배경과 남색 글자 유지 */
+  :root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section)
+    :is(.keepsake-label, .worldview-chip, .webtoon-chip) {
+    background: var(--red);
+    box-shadow: none;
+    color: var(--ink);
+  }
+}
+
+/* ───────── 2. 강제 색상 모드 ───────── */
+@media (forced-colors: active) {
+  /* 카드, 패널, 머리말: 시스템 색 + 윤곽(그림자가 사라지므로 outline 사용) */
+  :root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section)
+    :is(
+      .keepsakes-heading,
+      .keepsake-card,
+      .worldview-heading,
+      .worldview-panel,
+      .webtoon-heading,
+      .webtoon-panel
+    ) {
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+  }
+
+  /* 칩: 노란 배경이 사라져도 모양이 보이도록 윤곽 */
+  :root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section)
+    :is(.keepsake-label, .worldview-chip, .webtoon-chip) {
+    background: Canvas;
+    color: CanvasText;
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+
+  /* 설문 링크: Highlight 면 + HighlightText 글자, 누르는 영역 44px 유지 */
+  :root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section)
+    :is(.keepsakes-link, .worldview-link, .webtoon-link) {
+    background: Highlight;
+    color: HighlightText;
+    min-block-size: 44px;
+    box-shadow: none;
+  }
+
+  /* 웹툰 번호 원: 면 색 원을 Highlight로 */
+  :root:root:root body .webtoon-section .webtoon-steps > li::before {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  /* 그림: 시스템 색으로 바뀌지 않게 */
+  :root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section)
+    :is(.keepsake-photo, .worldview-photo, .webtoon-photo):not(.artwork-unavailable) {
+    forced-color-adjust: none;
+  }
+
+  /* 그림을 불러오지 못했을 때의 안내 칸: 시스템 색 + 윤곽 */
+  :root:root:root body :is(.keepsakes-section, .worldview-section, .webtoon-section)
+    :is(.keepsake-photo, .worldview-photo, .webtoon-photo).artwork-unavailable {
+    background: Canvas;
+    color: CanvasText;
+    outline: 2px solid CanvasText;
+    outline-offset: -2px;
+  }
+}

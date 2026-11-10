@@ -1,0 +1,695 @@
+/*
+ * 히어로 영화 포스터 장면.
+ * main.jsx에서 styles-glass.css 다음에 불러옵니다.
+ * 움직임은 transform과 opacity만 쓰고, 가장자리 빛은 inset box-shadow로만 그립니다.
+ */
+
+/* 장면 뼈대 */
+
+:root body .hero {
+  --hero-fill: color-mix(in srgb, var(--white) 84%, transparent);
+  --hero-marquee: color-mix(in srgb, var(--night) 66%, transparent);
+  --hero-toggle: color-mix(in srgb, var(--white) 20%, transparent);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-block-size: min(100svh, 56rem);
+  background: var(--blue);
+  color: var(--white);
+}
+
+/* 배경 이미지와 천천히 움직이는 확대 */
+
+:root body .hero .hero-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--blue);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: translate3d(0, 0, 0) scale(1.04);
+  transform-origin: 50% 50%;
+  animation: hero-scene-drift 40s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes hero-scene-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.04);
+  }
+
+  50% {
+    transform: translate3d(-1.2%, -0.8%, 0) scale(1.1);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.04);
+  }
+}
+
+/* 어두운 남색 막: 아래쪽이 더 진하고 왼쪽 글 영역이 조금 더 진해요 */
+
+:root body .hero .hero-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--night) 60%, transparent) 0%,
+      color-mix(in srgb, var(--night) 0%, transparent) 62%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--night) 22%, transparent) 0%,
+      color-mix(in srgb, var(--night) 34%, transparent) 50%,
+      color-mix(in srgb, var(--night) 86%, transparent) 100%
+    );
+}
+
+/* 상단 마키 띠: 유리 재질 어두운 남색 */
+
+:root body .hero .marquee {
+  position: relative;
+  z-index: 3;
+  border: 0;
+  background: var(--hero-marquee);
+  color: var(--white);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim);
+}
+
+:root body .hero .marquee-track,
+:root body .hero .marquee-item {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--white);
+  font-weight: 500;
+}
+
+:root body .hero .marquee-toggle {
+  min-block-size: 44px;
+  min-inline-size: 44px;
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--hero-toggle);
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: var(--glass-rim);
+}
+
+/* 본문 배치 */
+
+:root body .hero .hero-grid {
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: center;
+  align-self: stretch;
+  column-gap: clamp(1.5rem, 4vw, 4rem);
+  row-gap: 1rem;
+  inline-size: 100%;
+  max-inline-size: 80rem;
+  min-inline-size: 0;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+  padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(3.5rem, 5vw, 4.5rem);
+}
+
+:root body .hero .hero-copy {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  justify-self: start;
+  inline-size: 100%;
+  max-inline-size: 40rem;
+  min-inline-size: 0;
+  margin: 0;
+  text-align: left;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 글래스 패널 */
+
+:root body .hero .hero-panel {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(0.875rem, 0.6rem + 0.8vw, 1.25rem);
+  padding: clamp(1.25rem, 0.8rem + 1.8vw, 2.75rem);
+  border-radius: 28px;
+  background: var(--hero-fill);
+  color: var(--ink);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  text-align: left;
+}
+
+:root body .hero .hero-copy .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  margin: 0;
+  padding: 0.5rem 1.125rem;
+  border-radius: var(--glass-radius);
+  background: var(--red);
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0;
+  box-shadow: var(--glass-rim-tint);
+}
+
+:root body .hero .hero-copy h1 {
+  max-inline-size: 100%;
+  max-width: none;
+  margin: 0;
+  color: var(--blue);
+  font-size: clamp(2rem, 1rem + 2.9vw, 3.75rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-wrap: balance;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+:root body .hero .hero-description {
+  max-inline-size: 32rem;
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1rem, 0.94rem + 0.3vw, 1.1875rem);
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* 버튼 두 개 */
+
+:root body .hero .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block-start: 0.25rem;
+}
+
+:root body .hero .hero-actions .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-block-size: 48px;
+  min-inline-size: 44px;
+  margin: 0;
+  padding: 0.75rem 1.5rem;
+  border: 0;
+  border-radius: var(--glass-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  box-shadow: var(--glass-rim-tint), var(--glass-tint-shadow);
+  transition:
+    transform var(--glass-press),
+    box-shadow var(--glass-press);
+}
+
+:root body .hero .hero-actions .button-yellow {
+  background: var(--red);
+  color: var(--ink);
+}
+
+:root body .hero .hero-actions .button-glass {
+  background: color-mix(in srgb, var(--white) 94%, transparent);
+  color: var(--ink);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow:
+    var(--glass-rim-tint),
+    0 6px 18px color-mix(in srgb, var(--night) 28%, transparent);
+}
+
+@media (hover: hover) {
+  :root body .hero .hero-actions .button:hover {
+    transform: translateY(-2px);
+  }
+}
+
+:root body .hero .hero-actions .button:active {
+  transform: scale(0.97);
+}
+
+/* 패널 아래 안내문 */
+
+:root body .hero .hero-disclaimer {
+  max-inline-size: 36rem;
+  margin: 1rem 0 0;
+  color: var(--white);
+  font-size: clamp(1rem, 0.94rem + 0.2vw, 1.0625rem);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-align: left;
+}
+
+/* 캐릭터 영역 */
+
+:root body .hero .hero-art {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  place-items: center;
+  align-self: center;
+  justify-self: end;
+  inline-size: min(100%, 40rem);
+  min-inline-size: 0;
+  min-block-size: 0;
+  margin: 0;
+  padding: 0 0 2.75rem;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+:root body .hero .hero-art::before {
+  content: none;
+  display: none;
+}
+
+:root body .hero .hero-orbit {
+  display: none;
+}
+
+:root body .hero .hero-glow {
+  position: absolute;
+  inset: 2% 0 8%;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 46%,
+    color-mix(in srgb, var(--white) 58%, transparent) 0%,
+    color-mix(in srgb, var(--white) 36%, transparent) 38%,
+    color-mix(in srgb, var(--white) 0%, transparent) 70%
+  );
+}
+
+:root body .hero .hero-floor {
+  position: absolute;
+  inset-inline: 20%;
+  inset-block-end: 2rem;
+  z-index: 0;
+  block-size: 2.25rem;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--night) 60%, transparent) 0%,
+    color-mix(in srgb, var(--night) 0%, transparent) 70%
+  );
+}
+
+:root body .hero .hero-art .character,
+:root body .hero .hero-art .character-fallback {
+  position: relative;
+  z-index: 1;
+  grid-area: 1 / 1;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+:root body .hero .hero-art .character {
+  display: flex;
+  justify-content: center;
+}
+
+:root body .hero .hero-art .character img {
+  inline-size: 100%;
+  block-size: auto;
+  max-block-size: min(62svh, 36rem);
+  object-fit: contain;
+  filter: drop-shadow(0 18px 24px color-mix(in srgb, var(--night) 35%, transparent));
+}
+
+:root body .hero .hero-art .character-fallback {
+  box-sizing: border-box;
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  min-block-size: clamp(15rem, 36vw, 28rem);
+  max-block-size: min(62svh, 36rem);
+  padding: 1.5rem;
+  border-radius: 28px;
+  background: var(--hero-fill);
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+}
+
+/* 떠오르는 스티커 */
+
+:root body .hero .hero-floaters {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+:root body .hero .hero-float {
+  position: absolute;
+  display: block;
+  line-height: 0;
+  pointer-events: none;
+  transform: scale(var(--float-scale, 1));
+  transform-origin: 50% 50%;
+  animation: hero-float 6s ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(var(--float-scale, 1));
+  }
+
+  50% {
+    transform: translate3d(0, -0.875rem, 0)
+      scale(var(--float-scale, 1));
+  }
+}
+
+:root body .hero .hero-float-star-lg {
+  inset-block-start: 2%;
+  inset-inline-start: 4%;
+  --float-delay: 0s;
+}
+
+:root body .hero .hero-float-water {
+  inset-block-start: 38%;
+  inset-inline-start: 0;
+  --float-delay: -1s;
+}
+
+:root body .hero .hero-float-rose {
+  inset-block-end: 22%;
+  inset-inline-start: 6%;
+  --float-delay: -2s;
+}
+
+:root body .hero .hero-float-fire {
+  inset-block-start: 6%;
+  inset-inline-end: 6%;
+  --float-delay: -3s;
+}
+
+:root body .hero .hero-float-pipiro {
+  inset-block-start: 40%;
+  inset-inline-end: 0;
+  --float-delay: -4s;
+}
+
+:root body .hero .hero-float-star-md {
+  inset-block-end: 20%;
+  inset-inline-end: 8%;
+  --float-delay: -5s;
+}
+
+/* 노란 태그 */
+
+:root body .hero .hero-tag {
+  position: absolute;
+  inset-block-end: 0.25rem;
+  inset-inline-end: 0.5rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-block-size: 44px;
+  max-inline-size: calc(100% - 1rem);
+  margin: 0;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--glass-radius);
+  background: var(--red);
+  color: var(--ink);
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  box-shadow: var(--glass-rim-tint), var(--glass-tint-shadow);
+  transform: rotate(-3deg);
+}
+
+/* 맨 아래 가운데 글래스 칩 */
+
+:root body .hero .hero-bottom {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  margin: 0;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+:root body .hero .hero-bottom .scroll-cue,
+:root body .hero .hero-bottom .motion-control {
+  box-sizing: border-box;
+  border-radius: var(--glass-radius);
+  background: var(--hero-fill);
+  color: var(--ink);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+}
+
+:root body .hero .hero-bottom .scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 44px;
+  min-inline-size: 44px;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+}
+
+:root body .hero .hero-bottom .motion-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.75rem;
+  max-inline-size: 100%;
+  padding: 0.375rem 1.125rem 0.375rem 0.375rem;
+}
+
+:root body .hero .hero-bottom .motion-control .button {
+  min-block-size: 44px;
+  min-inline-size: 44px;
+  margin: 0;
+  padding: 0.5rem 1.125rem;
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  box-shadow: var(--glass-rim-tint), var(--glass-tint-shadow);
+  transition: transform var(--glass-press);
+}
+
+:root body .hero .hero-bottom .motion-control .button:active {
+  transform: scale(0.97);
+}
+
+:root body .hero .hero-bottom .motion-control .helper {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+/* 블러 미지원이거나 투명도 줄이기와 고대비: 단색 채움 */
+
+@supports not (
+  (backdrop-filter: blur(1px)) or
+  (-webkit-backdrop-filter: blur(1px))
+) {
+  :root body .hero {
+    --hero-fill: var(--white);
+    --hero-marquee: var(--night);
+    --hero-toggle: color-mix(in srgb, var(--night) 80%, var(--white));
+  }
+}
+
+@media (prefers-reduced-motion: reduce),
+  (prefers-reduced-transparency: reduce),
+  (prefers-contrast: more) {
+  :root body .hero {
+    --hero-fill: var(--white);
+    --hero-marquee: var(--night);
+    --hero-toggle: color-mix(in srgb, var(--night) 80%, var(--white));
+  }
+}
+
+/* 모바일 */
+
+@media (max-width: 767px) {
+  :root body .hero .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-items: start;
+    row-gap: 1.25rem;
+    padding-inline: 1rem;
+    padding-block: 1.25rem 4rem;
+  }
+
+  :root body .hero .hero-copy,
+  :root body .hero .hero-art,
+  :root body .hero .hero-bottom {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  :root body .hero .hero-copy {
+    max-inline-size: none;
+  }
+
+  :root body .hero .hero-art {
+    justify-self: center;
+    align-self: start;
+    inline-size: 100%;
+    max-inline-size: 28rem;
+    padding: 0 0 2.5rem;
+  }
+
+  :root body .hero .hero-art .character img {
+    max-block-size: min(52svh, 22rem);
+  }
+
+  :root body .hero .hero-art .character,
+  :root body .hero .hero-art .character-fallback {
+    max-block-size: 52svh;
+  }
+
+  :root body .hero .hero-art .character-fallback {
+    min-block-size: 0;
+  }
+
+  :root body .hero .hero-floor {
+    inset-block-end: 1.75rem;
+    block-size: 1.75rem;
+  }
+
+  :root body .hero .hero-float {
+    --float-scale: 0.62;
+  }
+
+  :root body .hero .hero-bottom {
+    flex-direction: column;
+  }
+
+  :root body .hero .hero-bottom .motion-control {
+    flex-direction: column;
+    padding: 0.5rem 1rem 0.75rem;
+    text-align: center;
+  }
+
+  :root body .hero .hero-bottom .motion-control .helper {
+    text-align: center;
+  }
+}
+
+/* 폭 360 이하 */
+
+@media (max-width: 22.5rem) {
+  :root body .hero .hero-grid {
+    padding-inline: 1rem;
+  }
+
+  :root body .hero .hero-panel {
+    padding: 1.25rem;
+  }
+
+  :root body .hero .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    inline-size: 100%;
+  }
+
+  :root body .hero .hero-actions .button {
+    inline-size: 100%;
+  }
+
+  :root body .hero .hero-float {
+    --float-scale: 0.5;
+  }
+
+  :root body .hero .hero-tag {
+    inset-inline-end: 0.25rem;
+    padding: 0.5rem 1rem;
+  }
+
+  :root body .hero .hero-bottom .scroll-cue {
+    max-inline-size: 100%;
+  }
+}
+
+/* 움직임 줄이기: 모두 정지 */
+
+@media (prefers-reduced-motion: reduce) {
+  :root body .hero,
+  :root body .hero *,
+  :root body .hero *::before,
+  :root body .hero *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  :root body .hero .hero-scene {
+    transform: translate3d(0, 0, 0) scale(1.04);
+    will-change: auto;
+  }
+
+  :root body .hero .hero-float {
+    transform: scale(var(--float-scale, 1));
+  }
+}

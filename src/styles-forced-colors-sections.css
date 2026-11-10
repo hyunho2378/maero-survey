@@ -1,0 +1,424 @@
+/* src/styles-forced-colors-sections.css */
+
+/*
+ * 첫 화면 히어로, 히어로 슬라이드, 결과 화면, 설문 장면의 강제 색상 규칙.
+ * main.jsx에서 결과 화면 CSS 다음에 가장 마지막으로 불러옵니다.
+ * 색은 시스템 색 다섯 가지만 쓰고 윤곽은 outline으로 그립니다.
+ * 사진과 3D 그림은 색 보정을 끄고 그 위의 글자 칸은 Canvas 면으로 바꿉니다.
+ * 새 애니메이션과 전환은 만들지 않습니다.
+ */
+
+@media (forced-colors: active) {
+
+  /* ===== 히어로 장면 ===== */
+
+  /* 배경 사진: 색 보정을 끕니다 */
+  :root:root:root body .hero .hero-scene {
+    forced-color-adjust: none;
+  }
+
+  /* 어두운 막은 글자를 Canvas 면이 받치므로 숨깁니다 */
+  :root:root:root body .hero .hero-veil {
+    display: none;
+  }
+
+  /* 캐릭터와 떠오르는 스티커 그림 */
+  :root:root:root body .hero :is(
+    .hero-floaters,
+    .hero-float,
+    .hero-glow,
+    .hero-floor,
+    .hero-art .character,
+    .hero-art .character img
+  ) {
+    forced-color-adjust: none;
+  }
+
+  /* 사진 위에 놓인 글자 칸: 얇은 윤곽의 Canvas 면 */
+  :root:root:root body .hero :is(
+    .hero-panel,
+    .hero-copy .eyebrow,
+    .hero-disclaimer,
+    .hero-bottom .scroll-cue,
+    .hero-bottom .motion-control,
+    .hero-bottom .hero-slide-controls
+  ) {
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* 강조 태그와 그림 대체 칸: 굵은 윤곽 */
+  :root:root:root body .hero :is(.hero-tag, .character-fallback) {
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 2px solid CanvasText;
+    outline-offset: 0;
+  }
+
+  /* 상단 마키 띠: 화면 가장자리에서 윤곽이 잘리지 않게 안쪽으로 그립니다 */
+  :root:root:root body .hero .marquee {
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* 패널 아래 안내문은 사진 위에 바로 놓이므로 칸을 만듭니다 */
+  :root:root:root body .hero .hero-disclaimer {
+    inline-size: fit-content;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  /* 버튼과 조작 칩 */
+  :root:root:root body .hero :is(
+    .marquee-toggle,
+    .hero-actions .button,
+    .hero-bottom .motion-control .button,
+    .hero-slide-controls .hero-slide-button
+  ) {
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+  }
+
+  /* 주 버튼과 일시정지 버튼: Highlight 면 */
+  :root:root:root body .hero .hero-actions .button-yellow,
+  :root:root:root body .hero .hero-slide-controls .hero-slide-button-pause {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  /* 누르는 영역 44px 이상 유지 */
+  :root:root:root body .hero :is(
+    .marquee-toggle,
+    .hero-bottom .scroll-cue,
+    .hero-bottom .motion-control .button,
+    .hero-slide-controls .hero-slide-button,
+    .hero-slide-controls .hero-slide-dot
+  ) {
+    min-block-size: 44px;
+    min-inline-size: 44px;
+  }
+
+  :root:root:root body .hero .hero-actions .button {
+    min-block-size: 48px;
+    min-inline-size: 44px;
+  }
+
+  :root:root:root body .hero :is(.hero-copy .eyebrow, .hero-tag) {
+    min-block-size: 44px;
+  }
+
+  /* 슬라이드 점: 안 보이는 점은 CanvasText, 현재 점은 긴 알약에 Highlight */
+  :root:root:root body .hero .hero-slide-dot-mark {
+    background: CanvasText;
+  }
+
+  :root:root:root body .hero .hero-slide-controls .hero-slide-dot[aria-current="true"] .hero-slide-dot-mark {
+    background: Highlight;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+  }
+
+  /* 키보드 포커스: 굵은 윤곽을 간격을 두고 그립니다 */
+  :root:root:root body .hero :is(
+    .marquee-toggle,
+    .hero-actions .button,
+    .hero-bottom .scroll-cue,
+    .hero-bottom .motion-control .button,
+    .hero-slide-controls .hero-slide-button,
+    .hero-slide-controls .hero-slide-dot
+  ):focus-visible {
+    outline: 3px solid CanvasText;
+    outline-offset: 3px;
+    box-shadow: none;
+  }
+
+  /* ===== 결과 화면 ===== */
+
+  /* 장면 배경 사진: 색 보정을 끄고 바탕만 Canvas로 둡니다 */
+  :root:root:root body .result-stage {
+    forced-color-adjust: none;
+    background-color: Canvas;
+  }
+
+  /* 큰 카드: 보정 해제를 이어받지 않도록 되돌리고 Canvas 면으로 바꿉니다 */
+  :root:root:root body .result-stage .result-card {
+    forced-color-adjust: auto;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 2px solid CanvasText;
+    outline-offset: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* 카드 안의 캐릭터 그림 */
+  :root:root:root body .result-stage .result-character-float .character,
+  :root:root:root body .result-stage .result-character-float .character img {
+    forced-color-adjust: none;
+  }
+
+  /* 숫자 칩과 이메일 안내 띠 */
+  :root:root:root body .result-stage :is(.result-scores > div, .result-newsletter) {
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* 공식 사이트 버튼 */
+  :root:root:root body .result-stage .result-card .button {
+    background: Highlight;
+    color: HighlightText;
+    box-shadow: none;
+    outline: 2px solid CanvasText;
+    outline-offset: 0;
+    min-block-size: 48px;
+  }
+
+  :root:root:root body .result-stage .result-card .button:focus-visible {
+    outline: 3px solid CanvasText;
+    outline-offset: 3px;
+  }
+
+  /* 영상 미리보기 카드 */
+  :root:root:root body .ios-video-preview {
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+  }
+
+  :root:root:root body :is(.ios-video-preview-scene, .ios-video-preview-character) {
+    forced-color-adjust: none;
+  }
+
+  /* 그림 위에 겹친 안내 칸과 재생 버튼 */
+  :root:root:root body :is(.ios-video-open, .ios-video-preview-note) {
+    forced-color-adjust: auto;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 2px solid CanvasText;
+    outline-offset: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  :root:root:root body .ios-video-open {
+    background: Highlight;
+    color: HighlightText;
+    min-block-size: 48px;
+  }
+
+  :root:root:root body .ios-video-open:focus-visible {
+    outline: 3px solid CanvasText;
+    outline-offset: 3px;
+  }
+
+  /* 영상 카드 아래 조작 영역 */
+  :root:root:root body .video-card-footer :is(button, a, .button) {
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+    min-block-size: 44px;
+  }
+
+  /* ===== 설문 장면 ===== */
+
+  /* 실사 배경: 색 보정을 끕니다 */
+  :root:root:root body .survey-section.survey-scene {
+    forced-color-adjust: none;
+    background-color: Canvas;
+  }
+
+  /* 글자가 있는 영역은 보정을 다시 켭니다 */
+  :root:root:root body .survey-scene :is(.survey-container, .survey-progress) {
+    forced-color-adjust: auto;
+  }
+
+  /* 별 스티커와 3D 마에로 그림 */
+  :root:root:root body .survey-scene :is(.question-number .sticker, .survey-maero) {
+    forced-color-adjust: none;
+  }
+
+  /* 글래스 카드: Canvas 면 */
+  :root:root:root body .survey-scene :is(.question-card, .form-section-card, .newsletter-card) {
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* 선택지 행: 원본의 important 배경을 같은 방식으로 덮습니다 */
+  :root:root:root body .survey-scene .form-body .choice {
+    background: Canvas !important;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+    min-block-size: 52px;
+  }
+
+  /* 선택 표시 층 */
+  :root:root:root body .survey-scene .form-body .choice::before {
+    background: Highlight;
+  }
+
+  :root:root:root body .survey-scene .form-body .choice.is-selected {
+    background: Highlight !important;
+    color: HighlightText;
+    box-shadow: none;
+    outline: 2px solid CanvasText;
+  }
+
+  /* 체크 표시: 고리는 CanvasText, 선택되면 HighlightText 원에 Highlight 체크 */
+  :root:root:root body .survey-scene .form-body .choice-indicator svg .choice-indicator-ring {
+    color: CanvasText;
+  }
+
+  :root:root:root body .survey-scene .form-body .choice-indicator svg .choice-indicator-fill {
+    color: HighlightText;
+  }
+
+  :root:root:root body .survey-scene .form-body .choice-indicator svg .choice-indicator-check {
+    color: Highlight;
+  }
+
+  /* 5점 척도 칸: 폭 44px 이상 유지 */
+  :root:root:root body .survey-scene .form-body .scale-choice {
+    min-block-size: 52px;
+    min-inline-size: 44px;
+  }
+
+  :root:root:root body .survey-scene .form-body .scale-selected-mark {
+    color: HighlightText;
+  }
+
+  /* 잠긴 선택지 */
+  :root:root:root body .survey-scene .form-body:disabled .choice:not(.is-selected) {
+    color: GrayText;
+    outline-color: GrayText;
+  }
+
+  /* 포커스: 선택 지원이 없는 브라우저에서도 굵은 윤곽을 유지합니다 */
+  :root:root:root body .survey-scene .form-body .choice:focus-within {
+    outline: 3px solid CanvasText;
+    outline-offset: 2px;
+  }
+
+  @supports selector(:has(*)) {
+    :root:root:root body .survey-scene .form-body .choice:focus-within {
+      outline: 1px solid CanvasText;
+      outline-offset: 0;
+    }
+
+    :root:root:root body .survey-scene .form-body .choice:has(input:focus-visible) {
+      outline: 3px solid CanvasText;
+      outline-offset: 2px;
+    }
+  }
+
+  /* 오류 문구는 색을 잃으므로 굵기로 구분합니다 */
+  :root:root:root body .survey-scene .field-error {
+    font-weight: 600;
+  }
+
+  /* 이메일 입력 칸 */
+  :root:root:root body .survey-scene .input-group input {
+    background: Canvas;
+    color: CanvasText;
+    outline: 2px solid CanvasText;
+    outline-offset: 0;
+    min-block-size: 52px;
+  }
+
+  :root:root:root body .survey-scene .input-group input::placeholder {
+    color: GrayText;
+    opacity: 1;
+  }
+
+  :root:root:root body .survey-scene .input-group input:disabled {
+    color: GrayText;
+    outline-color: GrayText;
+  }
+
+  :root:root:root body .survey-scene .input-group input:disabled::placeholder {
+    color: GrayText;
+  }
+
+  :root:root:root body .survey-scene .input-group input:focus-visible {
+    outline: 3px solid CanvasText;
+    outline-offset: 3px;
+  }
+
+  /* 하단 진행 막대 */
+  :root:root:root body .survey-scene .survey-progress.survey-progress-glass {
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    outline: 2px solid CanvasText;
+    outline-offset: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  :root:root:root body .survey-scene .survey-progress-track {
+    background: Canvas;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+  }
+
+  :root:root:root body .survey-scene .survey-progress-fill {
+    background: Highlight;
+  }
+
+  /* 제출 영역: 사진 위에 바로 놓인 안내문은 Canvas 칸으로 받칩니다 */
+  :root:root:root body .survey-scene .submit-area > .helper {
+    background: Canvas;
+    color: CanvasText;
+    outline: 1px solid CanvasText;
+    outline-offset: 0;
+    padding: var(--space-2) var(--space-4);
+  }
+
+  :root:root:root body .survey-scene .submit-button {
+    background: Highlight;
+    color: HighlightText;
+    box-shadow: none;
+    outline: 2px solid CanvasText;
+    outline-offset: 0;
+    min-block-size: 56px;
+  }
+
+  :root:root:root body .survey-scene .submit-button:disabled {
+    background: Canvas;
+    color: GrayText;
+    outline-color: GrayText;
+  }
+
+  :root:root:root body .survey-scene .submit-button:focus-visible {
+    outline: 3px solid CanvasText;
+    outline-offset: 3px;
+  }
+}

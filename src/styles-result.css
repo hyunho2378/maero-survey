@@ -1,0 +1,379 @@
+/*
+ * 결과 화면 엔딩 장면과 영상 미리보기 글래스 표현층.
+ * main.jsx에서 가장 마지막에 불러옵니다.
+ * 움직임은 transform, scale, opacity만 사용합니다.
+ */
+
+/* 장면 배경 */
+:root body .result-stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-block-size: 36rem;
+  min-block-size: min(100svh, 52rem);
+  padding: clamp(0.75rem, 4vw, 3rem);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--glass-radius);
+  background-color: var(--blue);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* 큰 글래스 카드 */
+:root body .result-stage .result-card {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 40rem;
+  margin: 0;
+  padding: clamp(1.25rem, 5vw, 2.5rem);
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+  text-align: center;
+  animation: result-rise 700ms var(--glass-spring) both;
+}
+
+:root body .result-stage .result-card > * {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  margin: 0;
+}
+
+:root body .result-stage .result-card :is(p, h2, figcaption, span, strong, a) {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+/* 글자 */
+:root body .result-stage .result-eyebrow {
+  color: var(--night);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+:root body .result-stage .result-card h2 {
+  color: var(--night);
+  font-weight: 600;
+  line-height: 1.3;
+  outline: none;
+}
+
+:root body .result-stage .result-card p {
+  color: var(--night);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+:root body .result-stage .result-card .lead {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* 캐릭터 세 명 */
+:root body .result-stage .result-characters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.25rem, 2vw, 1rem);
+  inline-size: 100%;
+  margin-block: 0.5rem;
+}
+
+:root body .result-stage .result-figure {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  margin: 0;
+}
+
+:root body .result-stage .result-character-stage {
+  position: relative;
+  inline-size: 100%;
+  padding-block-end: 0.75rem;
+}
+
+:root body .result-stage .result-character-float {
+  display: grid;
+  justify-items: center;
+  inline-size: 100%;
+  animation: result-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+:root body .result-stage .result-character-float .character {
+  inline-size: 100%;
+  max-inline-size: 9rem;
+  margin: 0;
+}
+
+:root body .result-stage .result-character-float .character img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  max-inline-size: 100%;
+}
+
+:root body .result-stage .result-character-shadow {
+  position: absolute;
+  inset-inline: 22%;
+  inset-block-end: 0;
+  block-size: 0.5rem;
+  border-radius: 50%;
+  background: var(--glass-floor);
+  animation: result-shadow 6s ease-in-out infinite;
+}
+
+:root body .result-stage .result-figure-2 :is(.result-character-float, .result-character-shadow) {
+  animation-delay: -2s;
+}
+
+:root body .result-stage .result-figure-3 :is(.result-character-float, .result-character-shadow) {
+  animation-delay: -4s;
+}
+
+:root body .result-stage .result-figure figcaption {
+  color: var(--night);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* 숫자 글래스 칩 */
+:root body .result-stage .result-scores {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  inline-size: 100%;
+}
+
+:root body .result-stage .result-scores > div {
+  display: grid;
+  place-content: center;
+  gap: 0.25rem;
+  min-inline-size: 0;
+  min-block-size: 5rem;
+  padding: 0.875rem 0.5rem;
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-regular);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .result-stage .result-scores span {
+  color: var(--night);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+:root body .result-stage .result-scores strong {
+  color: var(--night);
+  font-size: clamp(1.5rem, 7vw, 2.25rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+/* 이메일 안내 띠 */
+:root body .result-stage .result-newsletter {
+  inline-size: 100%;
+  padding: 0.875rem 1rem;
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-regular);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim);
+}
+
+:root body .result-stage .result-newsletter p {
+  margin-block: 0;
+  font-size: 0.9375rem;
+}
+
+/* 공식 사이트 버튼 */
+:root body .result-stage .result-card .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-block-size: 48px;
+  max-inline-size: 100%;
+  padding: 0.75rem 1.5rem;
+  border: 0;
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-rim-tint), var(--glass-tint-shadow);
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+}
+
+:root body .result-stage .result-card .button:focus-visible,
+:root body .ios-video-open:focus-visible {
+  outline: 3px solid var(--night);
+  outline-offset: 3px;
+}
+
+/* 영상 미리보기 카드 */
+:root body .ios-video-preview {
+  border: 0;
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+}
+
+:root body .ios-video-preview-scene {
+  border-radius: var(--glass-radius);
+  object-fit: cover;
+}
+
+:root body .ios-video-preview-character {
+  inline-size: min(48%, 13rem);
+  max-inline-size: 100%;
+  height: auto;
+}
+
+:root body .ios-video-open {
+  box-sizing: border-box;
+  min-block-size: 48px;
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+  font-weight: 600;
+  line-height: 1.3;
+  word-break: keep-all;
+  text-wrap: balance;
+}
+
+:root body .ios-video-preview-note {
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+  font-weight: 500;
+  line-height: 1.5;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+:root body .video-card-heading :is(h2, h3, h4) {
+  font-weight: 600;
+}
+
+:root body :is(.video-card-heading, .video-card-footer) :is(p, h2, h3, h4) {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+:root body .video-card-footer :is(button, a, .button) {
+  min-block-size: 44px;
+}
+
+/* 360px 안팎 */
+@media (max-width: 30rem) {
+  :root body .result-stage .result-card {
+    gap: 0.875rem;
+  }
+
+  :root body .result-stage .result-figure figcaption {
+    font-size: 0.8125rem;
+  }
+}
+
+/* backdrop-filter 미지원: 단색 채움 */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root body .result-stage .result-card,
+  :root body .result-stage .result-scores > div,
+  :root body .result-stage .result-newsletter,
+  :root body .ios-video-open,
+  :root body .ios-video-preview-note {
+    background: var(--white);
+  }
+}
+
+@keyframes result-rise {
+  from {
+    transform: translateY(1.5rem);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes result-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-0.625rem);
+  }
+}
+
+@keyframes result-shadow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(0.82);
+    opacity: 0.6;
+  }
+}
+
+/* 움직임 줄이기 */
+@media (prefers-reduced-motion: reduce) {
+  :root body *,
+  :root body *::before,
+  :root body *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* 캐릭터 네 명(마에로 세 모습과 삐삐로) 격자 보정 */
+:root body .result-stage .result-characters {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 560px) {
+  :root body .result-stage .result-characters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 0.75rem;
+  }
+}

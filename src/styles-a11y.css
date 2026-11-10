@@ -1,0 +1,90 @@
+/*
+ * 접근성 보강층. main.jsx에서 styles-result.css 다음에 불러옵니다.
+ * 글자 굵기, 크기, 여백, 누르는 영역(44px 이상)은 건드리지 않습니다.
+ * 테두리 선은 쓰지 않고, 예외는 포커스 outline과 forced-colors 윤곽뿐입니다.
+ */
+
+/* 1. 움직임 줄이기: 시트 올라오기, 시트 페이드, 배경막 페이드를 모두 끕니다. */
+@media (prefers-reduced-motion: reduce) {
+  :root body .ios-sheet[open],
+  :root body .ios-sheet[open]::backdrop {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* 2. 영상 시트 물결: 옅은 크림색 대신 사이트 파란색. 재생 중 규칙보다 특이도를 높입니다. */
+:root body .ios-video-sheet .video-wave,
+:root body .ios-video-sheet.is-playing .video-wave,
+:root body .ios-video-sheet .video-card.is-playing .video-wave {
+  color: var(--theater-accent, var(--blue));
+}
+
+/* 3. 강제 색상: 유리 면은 시스템 색, 포커스 링은 Highlight 3px 실선. */
+@media (forced-colors: active) {
+  :root body :is(
+    .site-header.ios-site-header,
+    .survey-progress,
+    .ios-sheet,
+    .hero-tag,
+    .marquee-toggle,
+    .ios-video-preview-note,
+    .gallery-controls > span,
+    .button,
+    .button-white,
+    .button-light,
+    .button-yellow,
+    .button-blue,
+    .button-red,
+    .submit-button,
+    .source-link,
+    .ios-video-open,
+    .ios-nav-button,
+    .ios-sheet-close,
+    .site-footer .source-list a
+  ) {
+    background: Canvas;
+    color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+  }
+
+  :root body :is(
+    .button,
+    .submit-button,
+    .source-link,
+    .ios-video-open,
+    .ios-nav-button,
+    .ios-sheet-close,
+    .marquee-toggle
+  ):is(:disabled, [aria-disabled="true"]) {
+    color: GrayText;
+    outline-color: GrayText;
+  }
+
+  :root body :is(a[href], button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 3px;
+    box-shadow: none;
+  }
+
+  :root body .story-grid > .collect-card .cc-flip:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: -6px;
+  }
+}
+
+/* 4. 고대비: 시트 뒤 배경막을 짙은 단색으로. */
+@media (prefers-contrast: more) {
+  :root body .ios-sheet[open]::backdrop {
+    background: var(--night, var(--ink));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+/* 보정(Aside 추가): 물결 svg가 자체 color를 가지므로 svg에 직접 지정합니다. */
+:root body .ios-video-sheet .video-wave .wave-divider {
+  color: var(--theater-accent, var(--blue));
+}

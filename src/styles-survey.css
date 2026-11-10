@@ -1,0 +1,729 @@
+/*
+ * 설문 구간: 실사 배경 위의 리퀴드 글래스 장면
+ * main.jsx 에서 styles-hero.css 다음에 불러옵니다.
+ *
+ * 앞선 CSS(styles, kitsch, ios, glass)보다 셀렉터 힘이 항상 크도록
+ * :root body .survey-scene 로 시작합니다.
+ * 색과 값은 이 파일 안에서 직접 선언합니다.
+ */
+
+/* ===== 섹션 바탕과 토큰 ===== */
+
+:root body .survey-section.survey-scene {
+  --sv-ink: var(--ink);
+  --sv-text: var(--text-secondary);
+  --sv-blue: var(--blue);
+  --sv-blue-deep: var(--blue);
+  --sv-red: var(--red);
+  --sv-glass: color-mix(in srgb, var(--white) 86%, transparent);
+  --sv-glass-filter: blur(24px) saturate(1.4);
+  --sv-row: color-mix(in srgb, var(--white) 82%, transparent);
+  --sv-edge:
+    inset 0 1px 0 color-mix(in srgb, var(--white) 95%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--white) 60%, transparent);
+  --sv-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  background-color: var(--white);
+  color: var(--sv-ink);
+  font-weight: 400;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+:root body .survey-scene :is(h1, h2, h3, h4, h5, h6, legend, strong, b) {
+  font-weight: 600;
+}
+
+:root body .survey-scene .survey-container {
+  inline-size: min(calc(100% - 24px), var(--survey-max, 44rem));
+  margin-inline: auto;
+}
+
+:root body .survey-scene .form-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* ===== 글래스 카드 ===== */
+
+:root body .survey-scene :is(.question-card, .form-section-card) {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 24px 20px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--sv-glass);
+  -webkit-backdrop-filter: var(--sv-glass-filter);
+  backdrop-filter: var(--sv-glass-filter);
+  box-shadow: var(--sv-edge), 0 12px 32px color-mix(in srgb, var(--night) 12%, transparent);
+  color: var(--sv-ink);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root body .survey-scene :is(.question-card, .form-section-card) {
+    background: color-mix(in srgb, var(--white) 96%, transparent);
+  }
+}
+
+@media (max-width: 480px) {
+  :root body .survey-scene :is(.question-card, .form-section-card) {
+    padding: 20px 16px;
+  }
+}
+
+/* 구간 안내 카드 */
+
+:root body .survey-scene .form-section-card {
+  padding-block: 20px;
+}
+
+:root body .survey-scene .form-section-card h3 {
+  margin: 0 0 8px;
+  color: var(--sv-blue);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+:root body .survey-scene .form-section-card p {
+  margin: 0;
+  color: var(--sv-text);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* ===== 문항 머리: 별 스티커와 제목 ===== */
+
+:root body .survey-scene .question-card legend {
+  float: left;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+:root body .survey-scene .question-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-inline-size: 0;
+}
+
+:root body .survey-scene .question-number {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  inline-size: 36px;
+  block-size: 36px;
+  margin: 0;
+}
+
+/* 번호 글자는 숨기고 별 스티커만 남깁니다. */
+:root body .survey-scene .question-number::after {
+  display: none;
+  content: none;
+}
+
+:root body .survey-scene .question-number .sticker {
+  inline-size: 36px;
+  block-size: 36px;
+}
+
+:root body .survey-scene .question-heading-copy {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+:root body .survey-scene .question-title {
+  display: block;
+  margin: 0;
+  padding-block-start: 2px;
+  color: var(--sv-ink);
+  font-size: var(--ios-title2-size, 1.375rem);
+  font-weight: 600;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+/* ===== 문항 아래 안내와 오류 ===== */
+
+:root body .survey-scene .question-footer {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0 0;
+}
+
+:root body .survey-scene .question-footer > p {
+  margin: 0;
+}
+
+:root body .survey-scene :is(.helper, .question-requirement) {
+  color: var(--sv-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+:root body .survey-scene .field-error {
+  color: var(--sv-red);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+:root body .survey-scene .question-card > .field-error {
+  margin-block: 12px 0;
+  padding-inline: 0;
+}
+
+/* ===== 선택지 목록 ===== */
+
+:root body .survey-scene .choice-options {
+  display: grid;
+  gap: 10px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
+}
+
+:root body .survey-scene .scale-options {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* ===== 글래스 행 ===== */
+
+/*
+ * background 한 줄만 !important 입니다.
+ * styles-glass.css 의 "선택된 짝수 행" 셀렉터가 너무 강해서
+ * 일반 방식으로는 덮이지 않습니다. 선택 표시는 ::before 층이 맡습니다.
+ */
+:root body .survey-scene .form-body .choice {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-block-size: 52px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--sv-row) !important;
+  color: var(--sv-ink);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--white) 95%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--white) 50%, transparent),
+    0 2px 6px color-mix(in srgb, var(--night) 8%, transparent);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  transform: none;
+  transition: transform 160ms var(--sv-ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 파란 채움 층: opacity 로만 바뀝니다. */
+:root body .survey-scene .form-body .choice::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  border-radius: inherit;
+  background: var(--sv-blue);
+  opacity: 0;
+  transition: opacity 160ms ease-out;
+  pointer-events: none;
+  content: "";
+}
+
+:root body .survey-scene .form-body .choice::after {
+  display: none;
+  content: none;
+  animation: none;
+}
+
+:root body .survey-scene .form-body .choice.is-selected {
+  color: var(--white);
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--white) 35%, transparent),
+    0 6px 16px color-mix(in srgb, var(--blue) 28%, transparent);
+}
+
+:root body .survey-scene .form-body .choice.is-selected::before {
+  opacity: 1;
+}
+
+/* 눌렀을 때 살짝 눌림 */
+:root body .survey-scene .form-body .choice:active {
+  transform: scale(0.98);
+}
+
+:root body .survey-scene .form-body:disabled .choice:active {
+  transform: none;
+}
+
+:root body .survey-scene .form-body:disabled .choice {
+  cursor: not-allowed;
+}
+
+:root body .survey-scene .form-body:disabled .choice:not(.is-selected) {
+  color: var(--sv-text);
+}
+
+:root body .survey-scene .form-body .choice-label {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  padding: 2px 0;
+  pointer-events: none;
+}
+
+/* 초점 링: outline 만 씁니다. */
+:root body .survey-scene .form-body .choice:focus-within {
+  outline: 3px solid var(--sv-ink);
+  outline-offset: 2px;
+}
+
+@supports selector(:has(*)) {
+  :root body .survey-scene .form-body .choice:focus-within {
+    outline: none;
+  }
+
+  :root body .survey-scene .form-body .choice:has(input:focus-visible) {
+    outline: 3px solid var(--sv-ink);
+    outline-offset: 2px;
+  }
+}
+
+/* ===== 체크 표시: transform 과 opacity 전환 ===== */
+
+:root body .survey-scene .form-body .choice-indicator {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  inline-size: 24px;
+  block-size: 24px;
+  pointer-events: none;
+}
+
+:root body .survey-scene .form-body .choice-indicator svg :is(
+  .choice-indicator-ring,
+  .choice-indicator-fill,
+  .choice-indicator-check
+) {
+  display: block;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 200ms var(--sv-ease),
+    opacity 160ms ease-out;
+}
+
+:root body .survey-scene .form-body .choice-indicator svg .choice-indicator-ring {
+  color: var(--sv-blue);
+  opacity: 1;
+  transform: scale(1);
+}
+
+:root body .survey-scene .form-body .choice-indicator svg .choice-indicator-fill {
+  color: var(--white);
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+:root body .survey-scene .form-body .choice-indicator svg .choice-indicator-check {
+  color: var(--sv-blue);
+  opacity: 0;
+  transform: scale(0.5);
+  transition-delay: 40ms;
+}
+
+:root body .survey-scene .form-body .choice input:checked ~ .choice-indicator svg .choice-indicator-ring {
+  opacity: 0;
+}
+
+:root body .survey-scene .form-body .choice input:checked ~ .choice-indicator svg :is(
+  .choice-indicator-fill,
+  .choice-indicator-check
+) {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ===== 5점 척도: 한 줄 다섯 칸, 칸마다 44px 이상 ===== */
+
+:root body .survey-scene .form-body .scale-choice {
+  display: grid;
+  place-items: center;
+  min-block-size: 52px;
+  min-inline-size: 44px;
+  padding: 0;
+  border-radius: 14px;
+  text-align: center;
+  animation: none;
+}
+
+:root body .survey-scene .form-body .scale-choice > .choice-label {
+  grid-area: 1 / 1;
+  flex: none;
+  margin: 0;
+  padding: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+:root body .survey-scene .form-body .scale-choice.is-selected > .choice-label {
+  font-weight: 600;
+}
+
+:root body .survey-scene .form-body .scale-selected-mark {
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-end: 6px;
+  inline-size: 14px;
+  block-size: 14px;
+  visibility: visible;
+  opacity: 0;
+  transform: scale(0.5);
+  transition:
+    transform 200ms var(--sv-ease),
+    opacity 160ms ease-out;
+  pointer-events: none;
+}
+
+:root body .survey-scene .form-body .scale-choice input:checked ~ .scale-selected-mark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+:root body .survey-scene .scale-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-block: 12px 0;
+  padding-inline: 0;
+}
+
+:root body .survey-scene .scale-labels span {
+  max-inline-size: 46%;
+  color: var(--sv-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
+/* ===== 소식 카드와 이메일 입력 ===== */
+
+:root body .survey-scene .newsletter-card h3 {
+  margin: 0 0 8px;
+  color: var(--sv-ink);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+:root body .survey-scene .newsletter-card > :is(h3, p) {
+  margin-inline: 0;
+}
+
+:root body .survey-scene .newsletter-card > p {
+  color: var(--sv-text);
+  line-height: 1.6;
+}
+
+:root body .survey-scene .input-group {
+  display: grid;
+  gap: 10px;
+  margin-block: 20px;
+}
+
+:root body .survey-scene .input-group > label {
+  font-weight: 500;
+}
+
+:root body .survey-scene .newsletter-card .input-group > :is(label, p),
+:root body .survey-scene #q-emailConsent > p {
+  padding-inline: 0;
+}
+
+:root body .survey-scene .input-group input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 52px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--sv-ink);
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+:root body .survey-scene .input-group input::placeholder {
+  color: var(--white);
+  opacity: 1;
+}
+
+:root body .survey-scene .input-group input:disabled {
+  background: var(--white);
+  color: var(--sv-text);
+}
+
+:root body .survey-scene .input-group input:disabled::placeholder {
+  color: var(--sv-text);
+}
+
+:root body .survey-scene .input-group input:focus-visible {
+  outline: 3px solid var(--sv-blue);
+  outline-offset: 3px;
+}
+
+:root body .survey-scene .consent-choice {
+  align-items: flex-start;
+  border-radius: 16px;
+}
+
+:root body .survey-scene .form-body .consent-choice .choice-indicator {
+  margin-block-start: 2px;
+}
+
+:root body .survey-scene .form-body .consent-choice > .choice-label {
+  padding-block: 2px;
+}
+
+/* ===== 하단 진행 막대: 글래스 막대와 scaleX 채움 ===== */
+
+:root body .survey-scene .survey-progress.survey-progress-glass {
+  position: fixed;
+  inset: auto 0 calc(env(safe-area-inset-bottom, 0px) + 12px);
+  z-index: var(--ios-toolbar-layer, 50);
+  isolation: isolate;
+  inline-size: min(calc(100% - 24px), var(--survey-max, 44rem));
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  background: var(--sv-glass);
+  -webkit-backdrop-filter: var(--sv-glass-filter);
+  backdrop-filter: var(--sv-glass-filter);
+  box-shadow: var(--sv-edge), 0 10px 30px color-mix(in srgb, var(--night) 16%, transparent);
+  color: var(--sv-ink);
+}
+
+/* 앞선 글래스 파일의 스크롤 농도 층은 쓰지 않습니다. */
+:root body .survey-scene .survey-progress.survey-progress-glass::before,
+:root body .survey-scene .survey-progress.survey-progress-glass::after {
+  display: none;
+  content: none;
+}
+
+:root body .survey-scene .survey-progress-glass .survey-progress-inner {
+  display: grid;
+  gap: 10px;
+  inline-size: 100%;
+  min-block-size: 0;
+  margin: 0;
+  padding: 12px 20px;
+}
+
+:root body .survey-scene .survey-progress-glass .survey-progress-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin: 0;
+}
+
+:root body .survey-scene .survey-progress-glass .survey-progress-heading p {
+  margin: 0;
+  color: var(--sv-ink);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+:root body .survey-scene .survey-progress-glass #survey-progress-label {
+  font-weight: 600;
+}
+
+:root body .survey-scene .survey-progress-glass .survey-progress-meter {
+  display: block;
+  inline-size: 100%;
+}
+
+:root body .survey-scene .survey-progress-track {
+  display: block;
+  block-size: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--blue) 18%, transparent);
+}
+
+:root body .survey-scene .survey-progress-fill {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: 999px;
+  background: var(--sv-blue);
+  transform-origin: left center;
+  transform: scaleX(var(--survey-progress-ratio, 0));
+  transition: transform 320ms var(--sv-ease);
+  will-change: transform;
+}
+
+/* 막대가 마지막 내용을 가리지 않도록 아래 여백을 늘립니다. */
+:root body:has(.survey-progress) {
+  padding-block-end: calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+:root:has(.survey-progress) {
+  scroll-padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+/* ===== 제출 영역: 모두 답하면 버튼이 살짝 떠오름 ===== */
+
+:root body .survey-scene .submit-area {
+  margin-block-start: 32px;
+}
+
+:root body .survey-scene .submit-button {
+  position: relative;
+  isolation: isolate;
+  inline-size: 100%;
+  min-block-size: 56px;
+  margin-block-end: 16px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--sv-red);
+  color: var(--ink);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--white) 35%, transparent);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  transform: translateY(0);
+  transition: transform 280ms var(--sv-ease);
+}
+
+/* 떠오름 그림자 층: opacity 로만 나타납니다. */
+:root body .survey-scene .submit-button::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: 0 16px 28px color-mix(in srgb, var(--red) 34%, transparent);
+  opacity: 0;
+  transition: opacity 280ms ease-out;
+  pointer-events: none;
+  content: "";
+}
+
+:root body .survey-scene .submit-area[data-ready="true"] .submit-button {
+  transform: translateY(-4px);
+}
+
+:root body .survey-scene .submit-area[data-ready="true"] .submit-button::before {
+  opacity: 1;
+}
+
+:root body .survey-scene .submit-button:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+:root body .survey-scene .submit-button:disabled {
+  background: var(--sv-blue-deep);
+  color: var(--white);
+}
+
+:root body .survey-scene .submit-button:focus-visible {
+  outline: 3px solid var(--sv-ink);
+  outline-offset: 3px;
+}
+
+:root body .survey-scene .submit-area > .helper {
+  text-align: center;
+}
+
+/* ===== 3D 마에로: 데스크톱에서만 ===== */
+
+:root body .survey-scene .survey-maero {
+  display: none;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (min-width: 1024px) {
+  :root body .survey-section.survey-scene {
+    padding-block-end: 10rem;
+  }
+
+  :root body .survey-scene .survey-maero {
+    position: absolute;
+    inset-inline-end: 24px;
+    inset-block-end: 24px;
+    display: block;
+    inline-size: 96px;
+    block-size: auto;
+    animation: survey-maero-float 6s ease-in-out infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes survey-maero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* ===== 움직임 줄이기: 설문 구간의 모든 움직임을 멈춥니다 ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  :root body .survey-scene,
+  :root body .survey-scene *,
+  :root body .survey-scene *::before,
+  :root body .survey-scene *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  :root body .survey-scene .form-body .choice:active,
+  :root body .survey-scene .submit-button:active {
+    transform: none;
+  }
+}
+:root body .survey-scene .question-card legend + * {
+  clear: both;
+}

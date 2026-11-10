@@ -1,0 +1,478 @@
+/*
+ * 축제 소개 구간: 실사 장면 배경 + 3D 캐릭터 + 글래스 카드.
+ * main.jsx에서 styles-a11y.css 앞에 불러옵니다.
+ * 움직임은 transform, scale, opacity만 사용합니다.
+ * border, outline으로 만든 선은 쓰지 않습니다. 포커스 표시는 styles-a11y.css가 맡습니다.
+ */
+
+/* 공통: 한국어 줄바꿈, 가로 넘침 방지(가로 스크롤은 film-window만) */
+:root body .festival-section {
+  overflow-x: clip;
+}
+
+:root body .festival-section,
+:root body .festival-section * {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 장면: 배경 요소 + 바닥색 */
+:root body .festival-section .festival-scene {
+  --scene-base: var(--blue);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  overflow: clip;
+  background: var(--scene-base);
+}
+
+:root body .festival-section .festival-scene.scene-fire {
+  --scene-base: var(--night);
+}
+
+:root body .festival-section .scene-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+:root body .festival-section .scene-backdrop .kitsch-artwork {
+  position: absolute;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  max-inline-size: none;
+  max-block-size: none;
+  aspect-ratio: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+  transform: none;
+}
+
+:root body .festival-section .scene-backdrop .artwork-unavailable {
+  display: none;
+}
+
+/* 영상 입구 구간: 어두운 바닥 그라데이션 */
+:root body .festival-section .red-band .scene-backdrop::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--night) 0%, transparent 70%);
+  content: "";
+}
+
+/* 구간 머리말 글래스 카드 */
+:root body .festival-section .festival-scene .section-heading {
+  inline-size: min(100%, var(--k-reading-max));
+  padding: var(--k-card-pad);
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .festival-section .festival-scene .section-heading :is(h2, h3, h4, p, .eyebrow, .lead) {
+  color: var(--night);
+}
+
+:root body .festival-section .festival-scene .section-heading :is(h2, h3, h4, .eyebrow) {
+  font-weight: 600;
+}
+
+:root body .festival-section .festival-scene .section-heading :is(p, .lead) {
+  font-weight: 400;
+}
+
+/* 머리말 + 3D 마에로 */
+:root body .festival-section .festival-hero {
+  --maero-size: clamp(7.5rem, 15vw, 11rem);
+  position: relative;
+  max-inline-size: var(--k-reading-max);
+  margin-block-end: calc(var(--maero-size) * 0.55 + var(--k-space-8));
+}
+
+:root body .festival-section .festival-hero .section-heading {
+  inline-size: 100%;
+  max-inline-size: none;
+  margin: 0;
+  padding-block-end: calc(var(--maero-size) * 0.45 + var(--k-card-pad));
+}
+
+:root body .festival-section .festival-maero {
+  position: absolute;
+  inset-inline-end: clamp(0.75rem, 3vw, 2rem);
+  inset-block-end: calc(var(--maero-size) * -0.55);
+  z-index: 2;
+  inline-size: var(--maero-size);
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+  animation: festival-float 6s ease-in-out infinite;
+}
+
+:root body .festival-section .festival-maero .kitsch-artwork {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  max-inline-size: none;
+  margin: 0;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 12px 10px var(--glass-floor));
+}
+
+:root body .festival-section .festival-maero .artwork-unavailable {
+  display: none;
+}
+
+/* 좁은 화면: 캐릭터를 카드 아래로 */
+@media (max-width: 40rem) {
+  :root body .festival-section .festival-hero {
+    margin-block-end: var(--k-space-8);
+  }
+
+  :root body .festival-section .festival-hero .section-heading {
+    padding-block-end: var(--k-card-pad);
+  }
+
+  :root body .festival-section .festival-maero {
+    position: relative;
+    inset: auto;
+    inline-size: min(9rem, 45%);
+    margin: var(--k-space-4) auto 0;
+  }
+}
+
+/* 글래스 카드: 정보, 연혁, 몸풍경, 영상 입구 */
+:root body .festival-section :is(
+  .information-card,
+  .timeline-card,
+  .theme-card,
+  .video-entry-card
+) {
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+  transition: transform var(--glass-press);
+}
+
+:root body .festival-section :is(
+  .information-card,
+  .timeline-card,
+  .theme-card,
+  .video-entry-card
+) :is(h4, p, summary, .eyebrow) {
+  color: var(--night);
+}
+
+:root body .festival-section :is(
+  .information-card,
+  .timeline-card,
+  .theme-card,
+  .video-entry-card
+):hover {
+  transform: none;
+}
+
+/* 눌림: scale 0.97, 180ms ease-out */
+:root body .festival-section :is(
+  .information-card,
+  .timeline-card,
+  .theme-card,
+  .video-entry-card
+):active {
+  transform: scale(0.97);
+}
+
+/* 정보 카드 */
+:root body .festival-section .information-card summary {
+  min-block-size: 44px;
+  color: var(--night);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+:root body .festival-section .information-card .details-body p {
+  font-weight: 400;
+}
+
+/* 연혁 카드 */
+:root body .festival-section .timeline-card .timeline-year {
+  color: var(--night);
+  font-weight: 600;
+}
+
+:root body .festival-section .timeline-card h4 {
+  font-weight: 600;
+}
+
+/* 몸풍경 카드 */
+:root body .festival-section .theme-card .theme-word {
+  position: relative;
+  background: transparent;
+  color: var(--night);
+  font-weight: 600;
+}
+
+:root body .festival-section .theme-card .theme-word::before {
+  position: absolute;
+  inset-block-start: var(--k-space-4);
+  inset-inline-start: var(--k-space-4);
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  border-radius: var(--glass-radius);
+  background: var(--blue);
+  content: "";
+}
+
+:root body .festival-section .theme-card:nth-child(2) .theme-word::before {
+  background: var(--red);
+}
+
+:root body .festival-section .theme-card:nth-child(3) .theme-word::before {
+  background: var(--ink);
+}
+
+:root body .festival-section .theme-card h4 {
+  font-weight: 600;
+}
+
+/* 대표 프로그램 카드 (scene_fire 위) */
+:root body .festival-section .poster-card {
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .festival-section .poster-card .poster-label {
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+  font-weight: 600;
+}
+
+:root body .festival-section .poster-card :is(.scene-note, .program-place, p, summary) {
+  color: var(--night);
+}
+
+:root body .festival-section .poster-card .program-place {
+  font-weight: 600;
+}
+
+:root body .festival-section .poster-card .program-number {
+  font-weight: 600;
+}
+
+:root body .festival-section .poster-card .program-details summary {
+  display: list-item;
+  box-sizing: border-box;
+  min-block-size: 44px;
+  padding-block: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* 영상 입구 카드 */
+:root body .festival-section .video-entry-card {
+  text-decoration: none;
+}
+
+:root body .festival-section .video-entry-card .eyebrow {
+  font-weight: 600;
+}
+
+:root body .festival-section .video-entry-card h4 {
+  font-weight: 600;
+}
+
+:root body .festival-section .video-entry-card .text-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  color: var(--night);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+/* 누르는 영역 44px 이상 */
+:root body .festival-section :is(.source-link, .button) {
+  box-sizing: border-box;
+  min-block-size: 44px;
+}
+
+:root body .festival-section .source-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 사진 구간 (scene_farewell) */
+:root body .festival-section .festival-scene :is(.helper) {
+  display: inline-block;
+  max-inline-size: var(--k-reading-max);
+  padding: var(--k-space-3) var(--k-space-5);
+  border-radius: var(--glass-radius);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+  font-weight: 400;
+}
+
+/* 사진이 없을 때의 준비 안내 칸 */
+:root body .festival-section .photo-placeholder {
+  padding: var(--k-card-pad);
+  border: 0;
+  border-radius: var(--glass-radius);
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .festival-section .photo-placeholder :is(h4, p, .eyebrow) {
+  color: var(--night);
+}
+
+:root body .festival-section .photo-placeholder h4,
+:root body .festival-section .photo-placeholder .eyebrow {
+  font-weight: 600;
+}
+
+:root body .festival-section .photo-placeholder p {
+  font-weight: 400;
+}
+
+/* 폴라로이드 안의 준비 안내: 폴라로이드 전체가 글래스 카드 */
+:root body .festival-section .polaroid:has(.photo-placeholder) {
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .festival-section .polaroid:has(.photo-placeholder) figcaption p {
+  color: var(--night);
+  font-weight: 500;
+}
+
+:root body .festival-section .polaroid .photo-placeholder {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* 갤러리 버튼 */
+:root body .festival-section .gallery-controls .button {
+  min-block-size: 44px;
+}
+
+/* 구간이 바뀔 때 스크롤로 나타나는 모션: CSS만 사용 */
+@keyframes festival-rise {
+  from { transform: translateY(2.5rem); }
+  to { transform: none; }
+}
+
+@keyframes festival-scene-in {
+  from { opacity: 0; transform: scale(1.06); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes festival-float {
+  0%,
+  100% { transform: translateY(0); }
+  50% { transform: translateY(-0.625rem); }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    :root body .festival-section :is(.section.container, .festival-band > .container) {
+      animation: festival-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry min(40%, 16rem);
+    }
+
+    :root body .festival-section .scene-backdrop {
+      animation: festival-scene-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+
+/* 움직임 줄이기: 모두 끔 */
+@media (prefers-reduced-motion: reduce) {
+  :root body .festival-section *,
+  :root body .festival-section *::before,
+  :root body .festival-section *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  :root body .festival-section :is(
+    .information-card,
+    .timeline-card,
+    .theme-card,
+    .video-entry-card
+  ):active {
+    transform: none !important;
+  }
+}
+
+/* 강제 색상 모드 */
+@media (forced-colors: active) {
+  :root body .festival-section :is(
+    .festival-scene .section-heading,
+    .information-card,
+    .timeline-card,
+    .theme-card,
+    .video-entry-card,
+    .poster-card,
+    .poster-label,
+    .photo-placeholder,
+    .helper
+  ) {
+    background: Canvas;
+    color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  :root body .festival-section .scene-backdrop {
+    display: none;
+  }
+}
+/* 보정(Aside 추가): 어두운 장면(불, 이별) 위에서 글래스가 회색으로 탁해 보이지 않게 흰색 비율을 높임 */
+:root body .festival-section .festival-scene.scene-fire,
+:root body .festival-section .festival-scene.scene-farewell,
+:root body .festival-section .red-band.festival-scene {
+  --glass-clear: color-mix(in srgb, var(--white) 90%, transparent);
+  --glass-regular: color-mix(in srgb, var(--white) 92%, transparent);
+  --glass-strong: color-mix(in srgb, var(--white) 94%, transparent);
+}

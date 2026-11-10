@@ -1,0 +1,362 @@
+/*
+ * 웹툰풍 네 칸 구간: 밝은 바닥색 + 정사각 그림 카드 + 글래스 설명 패널.
+ * main.jsx에서 styles-worldview.css 다음에 불러옵니다.
+ * 변수는 styles-keepsakes.css와 styles-worldview.css에서 쓰는 것만 씁니다.
+ * 움직임은 transform만 사용합니다.
+ * border, outline으로 만든 선과 옆 강조 막대는 쓰지 않습니다. 포커스 표시는 styles-a11y.css가 맡습니다.
+ * 글자 굵기는 400, 500, 600만 씁니다.
+ * 그림 위에는 글자를 올리지 않습니다. 글 패널은 그림 가장자리와 겹치지만 글자는 그림 바깥에서 시작합니다.
+ */
+
+/* 구간 바닥: 세계관 구간과 같은 글래스 재질 값 */
+:root body .webtoon-section {
+  --glass-clear: color-mix(in srgb, var(--white) 90%, transparent);
+  --glass-regular: color-mix(in srgb, var(--white) 92%, transparent);
+  --glass-strong: color-mix(in srgb, var(--white) 94%, transparent);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  overflow: clip;
+  background: var(--white);
+  color: var(--night);
+}
+
+/* 한국어 줄바꿈: 구절 단위 */
+:root body .webtoon-section,
+:root body .webtoon-section * {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 장식 원: 세계관 구간과 위치를 바꿔 흐름에 변화를 줌 */
+:root body .webtoon-section::before,
+:root body .webtoon-section::after {
+  position: absolute;
+  z-index: -1;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+:root body .webtoon-section::before {
+  inset-block-start: -5rem;
+  inset-inline-end: -4rem;
+  inline-size: clamp(9rem, 20vw, 16rem);
+  background: var(--blue);
+}
+
+:root body .webtoon-section::after {
+  inset-block-end: -4rem;
+  inset-inline-start: -4rem;
+  inline-size: clamp(10rem, 24vw, 18rem);
+  background: var(--red);
+}
+
+/* 안쪽 흐름 */
+:root body .webtoon-section > .container {
+  display: grid;
+  gap: var(--k-space-8, 2rem);
+  min-inline-size: 0;
+}
+
+/* 머리말 글래스 카드 */
+:root body .webtoon-section .webtoon-heading {
+  inline-size: min(100%, var(--k-reading-max, 42rem));
+  margin: 0;
+  padding: var(--k-card-pad, 1.5rem);
+  border: 0;
+  border-radius: 28px;
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .webtoon-section .webtoon-heading :is(h3, p, .eyebrow) {
+  margin-block: 0;
+  color: var(--night);
+  text-wrap: balance;
+}
+
+:root body .webtoon-section .webtoon-heading .webtoon-eyebrow {
+  margin-block-end: var(--k-space-3, 0.75rem);
+  border: 0;
+  background: transparent;
+  font-weight: 600;
+}
+
+:root body .webtoon-section .webtoon-heading h3 {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+:root body .webtoon-section .webtoon-heading .webtoon-lead {
+  margin-block-start: var(--k-space-3, 0.75rem);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* 그림과 설명 패널: 기본은 그림 위, 패널 아래 1열 */
+:root body .webtoon-section .webtoon-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: 100%;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* 그림: 1600 대 1600 정사각형, 사진 위에는 글자를 올리지 않음 */
+:root body .webtoon-section .webtoon-media {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  min-inline-size: 0;
+  aspect-ratio: 1 / 1;
+  border-radius: 28px;
+  background: var(--white);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+}
+
+:root body .webtoon-section .webtoon-photo {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  max-inline-size: none;
+  max-block-size: none;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+  transform: none;
+}
+
+/* 그림을 불러오지 못했을 때의 안내 칸 */
+:root body .webtoon-section .webtoon-photo.artwork-unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: var(--k-space-4, 1rem);
+  background: var(--red);
+  color: var(--night);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/*
+ * 글래스 설명 패널: 그림 아래 가장자리와 살짝 겹침.
+ * 겹친 만큼 위쪽 안쪽 여백을 늘려 글자는 그림 밖에서 시작합니다.
+ */
+:root body .webtoon-section .webtoon-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-inline-size: 0;
+  margin-block: -1.5rem 0;
+  margin-inline: 0.75rem;
+  padding: calc(var(--k-card-pad, 1.5rem) + 1.5rem) var(--k-card-pad, 1.5rem)
+    var(--k-card-pad, 1.5rem);
+  border: 0;
+  border-radius: 28px;
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .webtoon-section .webtoon-panel h4 {
+  margin: 0;
+  color: var(--night);
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+/* 작은 칩 */
+:root body .webtoon-section .webtoon-chip {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.75rem;
+  padding-inline: 0.75rem;
+  border: 0;
+  border-radius: 24px;
+  background: var(--red);
+  color: var(--night);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* 칸별 설명 번호 목록: 번호는 면 색 원으로 표시 */
+:root body .webtoon-section .webtoon-steps {
+  display: grid;
+  gap: 0.75rem;
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: webtoon-step;
+}
+
+:root body .webtoon-section .webtoon-steps > li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  align-items: start;
+  column-gap: 0.75rem;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  counter-increment: webtoon-step;
+}
+
+:root body .webtoon-section .webtoon-steps > li::before {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: 50%;
+  background: var(--night);
+  color: var(--white);
+  content: counter(webtoon-step);
+  content: counter(webtoon-step) / "";
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+:root body .webtoon-section .webtoon-steps p {
+  display: flex;
+  align-items: center;
+  min-block-size: 2.25rem;
+  margin: 0;
+  color: var(--night);
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  font-weight: 400;
+  line-height: 1.6;
+  text-wrap: balance;
+}
+
+/* 설문으로 가는 버튼형 링크: 누르는 영역 44px 이상 */
+:root body .webtoon-section .webtoon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  justify-self: start;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-block-size: 44px;
+  padding: 0.75rem 1.5rem;
+  border: 0;
+  border-radius: 28px;
+  background: var(--night);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  text-wrap: balance;
+  transition: transform var(--glass-press, 180ms ease-out);
+}
+
+/* 눌림: scale 0.97 */
+:root body .webtoon-section .webtoon-link:active {
+  transform: scale(0.97);
+}
+
+/* 1440px 이상: 그림 왼쪽 약 60퍼센트, 설명 패널 오른쪽 약 40퍼센트 */
+@media (min-width: 1440px) {
+  :root body .webtoon-section .webtoon-layout {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: center;
+  }
+
+  :root body .webtoon-section .webtoon-media {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* 패널은 그림 오른쪽 가장자리와 2rem 겹치고, 글자는 그 바깥에서 시작 */
+  :root body .webtoon-section .webtoon-panel {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    margin-inline-start: -2rem;
+    padding: var(--k-card-pad, 1.5rem);
+    padding-inline-start: calc(var(--k-card-pad, 1.5rem) + 2rem);
+  }
+}
+
+/* 768px 이하: 1열, 가로 스크롤 없음, 링크는 가로 전체 */
+@media (max-width: 768px) {
+  :root body .webtoon-section .webtoon-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :root body .webtoon-section .webtoon-link {
+    justify-self: stretch;
+    inline-size: 100%;
+  }
+}
+
+/* 움직임 줄이기: 애니메이션, 전환, hover, focus 변화를 모두 끔 */
+@media (prefers-reduced-motion: reduce) {
+  :root body .webtoon-section,
+  :root body .webtoon-section *,
+  :root body .webtoon-section *::before,
+  :root body .webtoon-section *::after,
+  :root body .webtoon-section::before,
+  :root body .webtoon-section::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  :root body .webtoon-section .webtoon-link:hover,
+  :root body .webtoon-section .webtoon-link:focus-visible,
+  :root body .webtoon-section .webtoon-link:active {
+    transform: none !important;
+  }
+}
+
+/* 강제 색상 모드 */
+@media (forced-colors: active) {
+  :root body .webtoon-section::before,
+  :root body .webtoon-section::after {
+    display: none;
+  }
+
+  :root body .webtoon-section :is(.webtoon-heading, .webtoon-panel) {
+    background: Canvas;
+    color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  :root body .webtoon-section .webtoon-steps > li::before {
+    background: ButtonFace;
+    color: ButtonText;
+  }
+
+  :root body .webtoon-section .webtoon-link {
+    background: ButtonFace;
+    color: ButtonText;
+  }
+}

@@ -1,0 +1,26 @@
+/*
+ * 대비 보정 전용 스타일.
+ * 파란 머리 카드 안의 접이식 카드 본문이 흰 글자로 흰 바탕에 놓이는 문제와
+ * 흰 바탕 위 레드 접이식 제목 글자 대비 4.0 문제만 고침.
+ * 색은 tokens.js 변수만 씀.
+ */
+:root body .form-header-card .information-card {
+  --text-secondary: var(--text-primary);
+  color: var(--text-primary);
+}
+
+:root body .form-header-card .information-card .details-body,
+:root body .form-header-card .information-card .privacy-copy,
+:root body .form-header-card .information-card .privacy-copy p,
+:root body .form-header-card .information-card .privacy-items li {
+  color: var(--text-primary);
+}
+
+:root body .information-card:nth-child(3n + 2) summary {
+  color: var(--text-primary);
+}
+
+/* 영상 시트 안 안내 문장이 흰 글자로 흰 바탕에 놓이던 문제만 고침. 색은 토큰만 씀. */
+:root body .ios-video-sheet .video-card-footer .helper {
+  color: var(--text-primary);
+}

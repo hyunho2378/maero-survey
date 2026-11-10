@@ -1,0 +1,295 @@
+/*
+ * 소품 시안 구간: 밝은 바닥색 + 글래스 카드.
+ * main.jsx에서 styles-festival.css 다음에 불러옵니다.
+ * 움직임은 transform, opacity만 사용합니다.
+ * border, outline으로 만든 선은 쓰지 않습니다. 포커스 표시는 styles-a11y.css가 맡습니다.
+ * 글자 굵기는 400, 500, 600만 씁니다.
+ */
+
+/* 구간 바닥: 밝은 색, 글래스 흰색 비율을 높여 글자 대비를 지킴 */
+:root body .keepsakes-section {
+  --glass-clear: color-mix(in srgb, var(--white) 90%, transparent);
+  --glass-regular: color-mix(in srgb, var(--white) 92%, transparent);
+  --glass-strong: color-mix(in srgb, var(--white) 94%, transparent);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  overflow: clip;
+  background: var(--white);
+  color: var(--night);
+}
+
+/* 한국어 줄바꿈: 구절 단위 */
+:root body .keepsakes-section,
+:root body .keepsakes-section * {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 장식 원: 글래스 뒤로 색이 비치도록 바닥에만 둠 */
+:root body .keepsakes-section::before,
+:root body .keepsakes-section::after {
+  position: absolute;
+  z-index: -1;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+:root body .keepsakes-section::before {
+  inset-block-start: -4rem;
+  inset-inline-end: -4rem;
+  inline-size: clamp(10rem, 24vw, 18rem);
+  background: var(--blue);
+}
+
+:root body .keepsakes-section::after {
+  inset-block-end: -5rem;
+  inset-inline-start: -4rem;
+  inline-size: clamp(9rem, 20vw, 16rem);
+  background: var(--red);
+}
+
+/* 안쪽 흐름 */
+:root body .keepsakes-section > .container {
+  display: grid;
+  gap: var(--k-space-8, 2rem);
+  min-inline-size: 0;
+}
+
+/* 머리말 글래스 카드 */
+:root body .keepsakes-section .keepsakes-heading {
+  inline-size: min(100%, var(--k-reading-max, 42rem));
+  margin: 0;
+  padding: var(--k-card-pad, 1.5rem);
+  border: 0;
+  border-radius: 28px;
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+:root body .keepsakes-section .keepsakes-heading :is(h3, p, .eyebrow) {
+  margin-block: 0;
+  color: var(--night);
+  text-wrap: balance;
+}
+
+:root body .keepsakes-section .keepsakes-heading .keepsakes-eyebrow {
+  margin-block-end: var(--k-space-3, 0.75rem);
+  border: 0;
+  background: transparent;
+  font-weight: 600;
+}
+
+:root body .keepsakes-section .keepsakes-heading h3 {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+:root body .keepsakes-section .keepsakes-heading .keepsakes-lead {
+  margin-block-start: var(--k-space-3, 0.75rem);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* 사진 카드 목록: 데스크톱 3열 */
+:root body .keepsakes-section .keepsake-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--k-space-5, 1.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:root body .keepsakes-section .keepsake-grid > li {
+  display: flex;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* 글래스 카드 */
+:root body .keepsakes-section .keepsake-card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  inline-size: 100%;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: 28px;
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  backdrop-filter: var(--glass-filter, blur(20px) saturate(1.4));
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--night);
+}
+
+/* 사진: 4:3, 모서리 24px, 사진 위에는 글자를 올리지 않음 */
+:root body .keepsakes-section .keepsake-media {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: 24px;
+  background: var(--white);
+}
+
+:root body .keepsakes-section .keepsake-photo {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  max-inline-size: none;
+  max-block-size: none;
+  aspect-ratio: 4 / 3;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+  transform: none;
+}
+
+/* 그림을 불러오지 못했을 때의 안내 칸 */
+:root body .keepsakes-section .keepsake-photo.artwork-unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: var(--k-space-4, 1rem);
+  background: var(--red);
+  color: var(--night);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* 카드 글자 영역 */
+:root body .keepsakes-section .keepsake-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: var(--k-space-4, 1rem) var(--k-space-3, 0.75rem) var(--k-space-3, 0.75rem);
+}
+
+:root body .keepsakes-section .keepsake-body :is(h4, p) {
+  margin: 0;
+  color: var(--night);
+  text-wrap: balance;
+}
+
+:root body .keepsakes-section .keepsake-body h4 {
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+:root body .keepsakes-section .keepsake-body p {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* 작은 라벨 */
+:root body .keepsakes-section .keepsake-label {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.75rem;
+  padding-inline: 0.75rem;
+  border: 0;
+  border-radius: 24px;
+  background: var(--red);
+  color: var(--night);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* 설문으로 가는 버튼형 링크: 누르는 영역 44px 이상 */
+:root body .keepsakes-section .keepsakes-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  justify-self: start;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-block-size: 44px;
+  padding: 0.75rem 1.5rem;
+  border: 0;
+  border-radius: 28px;
+  background: var(--night);
+  box-shadow: var(--glass-rim), var(--glass-shadow);
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  text-wrap: balance;
+  transition: transform var(--glass-press, 180ms ease-out);
+}
+
+/* 눌림: scale 0.97 */
+:root body .keepsakes-section .keepsakes-link:active {
+  transform: scale(0.97);
+}
+
+/* 768px 이하: 1열, 가로 스크롤 없음 */
+@media (max-width: 768px) {
+  :root body .keepsakes-section .keepsake-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :root body .keepsakes-section .keepsakes-link {
+    justify-self: stretch;
+    inline-size: 100%;
+  }
+}
+
+/* 움직임 줄이기: 애니메이션, 전환, hover, focus 변화를 모두 끔 */
+@media (prefers-reduced-motion: reduce) {
+  :root body .keepsakes-section,
+  :root body .keepsakes-section *,
+  :root body .keepsakes-section *::before,
+  :root body .keepsakes-section *::after,
+  :root body .keepsakes-section::before,
+  :root body .keepsakes-section::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  :root body .keepsakes-section .keepsakes-link:hover,
+  :root body .keepsakes-section .keepsakes-link:focus-visible,
+  :root body .keepsakes-section .keepsakes-link:active {
+    transform: none !important;
+  }
+}
+
+/* 강제 색상 모드 */
+@media (forced-colors: active) {
+  :root body .keepsakes-section::before,
+  :root body .keepsakes-section::after {
+    display: none;
+  }
+
+  :root body .keepsakes-section :is(.keepsakes-heading, .keepsake-card) {
+    background: Canvas;
+    color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  :root body .keepsakes-section .keepsakes-link {
+    background: ButtonFace;
+    color: ButtonText;
+  }
+}
