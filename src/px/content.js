@@ -229,6 +229,12 @@ export const surveyCopy = {
     { file: "img/orig/postcard_fire.jpg", title: "엽서 불", alt: "턱을 괸 레드 마에로와 삐삐로 엽서", group: "postcard" },
     { file: "img/orig/postcard_farewell.jpg", title: "엽서 배웅", alt: "붓을 든 마에로와 삐삐로 엽서", group: "postcard" }
   ],
+  mockups: [
+    { file: "img/mock/mock_keyring.jpg", alt: "마에로와 삐삐로 아크릴 키링 다섯 종 목업" },
+    { file: "img/mock/mock_postcard.jpg", alt: "마에로와 삐삐로 엽서 네 장 목업" },
+    { file: "img/mock/mock_sticker.jpg", alt: "마에로와 삐삐로 원형 스티커 목업" },
+    { file: "img/mock/mock_tattoo.jpg", alt: "마에로와 삐삐로 타투 스티커 목업" }
+  ],
   submitRemote: "제출",
   submitLocal: "제출"
 };

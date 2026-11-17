@@ -281,17 +281,13 @@ export default function PxSurvey({ tracker, onProgress }) {
                 {q("fire")}
                 {q("maero")}
                 {q("fit")}
-                {["keyring", "postcard"].map((group) => (
-                  <ul key={group} className={`px-keepsakes is-${group}`} role="list" data-track-section={`festival-keepsakes-${group}`}>
-                    {surveyCopy.keepsakes.filter((item) => item.group === group).map((item) => (
-                      <li key={item.file} className="px-keepsake">
-                        <figure>
-                          <Img file={item.file} alt={item.alt} width={900} height={708} />
-                        </figure>
-                      </li>
-                    ))}
-                  </ul>
-                ))}
+                <ul className="px-mockups" role="list" data-track-section="festival-mockups">
+                  {surveyCopy.mockups.map((item) => (
+                    <li key={item.file} className="px-mockup">
+                      <Img file={item.file} alt={item.alt} width={1400} height={1050} />
+                    </li>
+                  ))}
+                </ul>
                 {q("keepsakes")}
                 {q("price")}
                 {q("comment")}
