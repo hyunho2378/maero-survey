@@ -33,7 +33,7 @@ export default function PlaceMap() {
           <h3 id="placemap-title">네 곳을 잇는 걷는 길</h3>
 
           <p className="placemap-lead">
-            걷고 싶은 길은 설문에서 선택
+            네 장소와 대표 프로그램을 잇는 길 안내
           </p>
         </div>
 
@@ -69,7 +69,7 @@ export default function PlaceMap() {
         </div>
 
         <a className="placemap-link" href="#survey">
-          설문에서 걷고 싶은 장소 선택
+          축제 관심 설문으로 이동
         </a>
       </div>
     </section>

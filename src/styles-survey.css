@@ -657,6 +657,10 @@
   transform: translateY(-1px) scale(0.98);
 }
 
+:root body .survey-scene .submit-area[data-ready="true"] .submit-button:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
 :root body .survey-scene .submit-button:disabled {
   background: var(--sv-blue-deep);
   color: var(--white);
@@ -720,7 +724,8 @@
   }
 
   :root body .survey-scene .form-body .choice:active,
-  :root body .survey-scene .submit-button:active {
+  :root body .survey-scene .submit-button:active,
+  :root body .survey-scene .submit-area[data-ready="true"] .submit-button:active {
     transform: none;
   }
 }

@@ -22,11 +22,15 @@ const PRIVACY_VERSION = "2026-11-02";
 const RETENTION_DAYS = 90;
 const VIDEO_IDS = ["ggng8MTKaH0", "vWOqk1XbdB4"];
 const ENUMS = {
+  gender: ["female", "male"],
+  age: ["teen", "20s", "30s", "40s", "50s", "60s"],
+  region: ["chuncheon", "gangwon", "capital", "other"],
   awareness: ["never", "name", "know"],
-  water: ["join", "watch", "unchanged", "not_watched"],
-  fire: ["join", "watch", "unchanged", "not_watched"],
+  souvenir: ["yes", "no"],
+  water: ["join", "watch", "maero"],
+  fire: ["join", "watch", "maero"],
   maero: ["basic", "blue", "red"],
-  companion: ["alone", "friends", "family", "partner", "unsure"]
+  price: ["p5900", "p6900", "p7900", "p8900", "p9900"]
 };
 const KEEPSAKES = ["keyring", "postcard", "sticker", "tattoo"];
 const FORBIDDEN_KEYS = /^(name|fullname|full_name|username|phone|tel|telephone|mobile|cellphone|이름|성명|전화|전화번호|휴대폰)$/i;
@@ -126,7 +130,7 @@ function validatePayload(p) {
     if (!ENUMS[k].includes(input[k])) fail("필수 문항을 다시 확인해 주세요.");
     answers[k] = input[k];
   }
-  for (const k of ["before", "after"]) {
+  for (const k of ["before", "fit"]) {
     const v = input[k];
     if (!Number.isInteger(v) || v < 1 || v > 5) fail("마음 점수를 다시 확인해 주세요.");
     answers[k] = v;
@@ -138,6 +142,9 @@ function validatePayload(p) {
     uniq.add(it);
   }
   answers.keepsakes = [...input.keepsakes];
+  const comment = typeof input.comment === "string" ? input.comment.trim() : "";
+  if (comment.length > 500) fail("바라는 점은 500자 안으로 적어 주세요.");
+  answers.comment = comment;
   const email = String(input.email || "").trim();
   if (email) {
     if (!NEWSLETTER_ENABLED) fail("지금은 이메일을 받을 준비 중이에요.");
@@ -160,7 +167,7 @@ function validatePayload(p) {
       exposureAtFirstSelection: evidence(b.exposureAtFirstSelection)
     },
     afterLastChangedAt: isoDate(p.afterLastChangedAt),
-    scoreDelta: answers.after - answers.before,
+    scoreDelta: null,
     evidence: evidence(p.evidence),
     consent: {
       version: PRIVACY_VERSION,
@@ -239,10 +246,10 @@ function csvCell(v) {
   return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 function toCsv(records) {
-  const head = ["id", "receivedAt", "submittedAt", "awareness", "water", "fire", "maero", "companion", "before", "after", "scoreDelta", "keepsakes", "email", "emailConsent", "totalSeconds", "viewportWidth", "utm_source", "ref"];
+  const head = ["id", "receivedAt", "submittedAt", "gender", "age", "region", "awareness", "souvenir", "before", "water", "fire", "maero", "fit", "keepsakes", "price", "comment", "email", "emailConsent", "totalSeconds", "viewportWidth", "utm_source", "ref"];
   const rows = records.map((r) => [
-    r.id, r.receivedAt, r.submittedAt, r.answers.awareness, r.answers.water, r.answers.fire, r.answers.maero, r.answers.companion,
-    r.answers.before, r.answers.after, r.scoreDelta, r.answers.keepsakes, r.answers.email, r.answers.emailConsent,
+    r.id, r.receivedAt, r.submittedAt, r.answers.gender, r.answers.age, r.answers.region, r.answers.awareness, r.answers.souvenir, r.answers.before,
+    r.answers.water, r.answers.fire, r.answers.maero, r.answers.fit, r.answers.keepsakes, r.answers.price, r.answers.comment, r.answers.email, r.answers.emailConsent,
     r.evidence.totalSeconds, r.evidence.viewportWidth, r.evidence.acquisition.utm_source, r.evidence.acquisition.ref
   ]);
   return "\uFEFF" + [head, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";

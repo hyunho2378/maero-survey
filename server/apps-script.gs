@@ -16,11 +16,15 @@ var VIDEO_IDS = [
 ];
 
 var ENUMS = {
+  gender: ["female", "male"],
+  age: ["teen", "20s", "30s", "40s", "50s", "60s"],
+  region: ["chuncheon", "gangwon", "capital", "other"],
   awareness: ["never", "name", "know"],
-  water: ["join", "watch", "unchanged", "not_watched"],
-  fire: ["join", "watch", "unchanged", "not_watched"],
+  souvenir: ["yes", "no"],
+  water: ["join", "watch", "maero"],
+  fire: ["join", "watch", "maero"],
   maero: ["basic", "blue", "red"],
-  companion: ["alone", "friends", "family", "partner", "unsure"]
+  price: ["p5900", "p6900", "p7900", "p8900", "p9900"]
 };
 
 var KEEPSAKES = [
@@ -285,7 +289,7 @@ function validatePayload_(payload, configuration) {
     answers[key] = input[key];
   });
 
-  ["before", "after"].forEach(function (key) {
+  ["before", "fit"].forEach(function (key) {
     var value = input[key];
 
     if (
@@ -321,6 +325,15 @@ function validatePayload_(payload, configuration) {
   });
 
   answers.keepsakes = input.keepsakes.slice();
+
+  var comment =
+    typeof input.comment === "string" ? input.comment.trim() : "";
+
+  if (comment.length > 500) {
+    fail_("바라는 점은 500자 안으로 적어 주세요.");
+  }
+
+  answers.comment = comment;
 
   var email = String(input.email || "").trim();
 
@@ -375,7 +388,7 @@ function validatePayload_(payload, configuration) {
 
     afterLastChangedAt: isoDate_(payload.afterLastChangedAt),
 
-    scoreDelta: answers.after - answers.before,
+    scoreDelta: null,
 
     evidence: evidence_(payload.evidence),
 

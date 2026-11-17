@@ -1,6 +1,7 @@
 const palette = Object.freeze({
-  blue: "#0000FF",
-  red: "#FF0000",
+  /* 관리 화면 전용. 2026. 11. 10. 대표 정정으로 순수 블루와 순수 레드 폐기 */
+  blue: "#3172D8",
+  red: "#F4C418",
   ink: "#0A0A0A",
   secondary: "#333333",
   white: "#FFFFFF",
@@ -191,6 +192,133 @@ export const uiCopy = Object.freeze({
 
 export function applyTokens(element = document.documentElement) {
   for (const [name, value] of Object.entries(tokens)) {
+    element.style.setProperty(name, value);
+  }
+}
+
+/*
+ * v36 공개 화면 토큰 (2026. 11. 10.)
+ * 질의 202 답변의 색, 글자 단계, 격자, 모션, 그림자 값을 골라 쓰고
+ * 나머지는 직접 작성함. 공개 화면은 --px- 토큰만 씀.
+ * 색: 무채색, 순수 블루, 순수 레드만.
+ */
+const pxPalette = Object.freeze({
+  /* 2026. 11. 10. 16:50 대표 정정: 브랜드기획서 6-5 팔레트. 순수 블루와 순수 레드 폐기 */
+  yellow: "#F4C418",
+  yellowSoft: "#FFFB9C",
+  ink: "#261615",
+  paper: "#F9F9F9",
+  water: "#3172D8",
+  fire: "#FF7373",
+  white: "#FFFFFF",
+  surface2: "#F0F0F0",
+  text2: "#555555",
+  text3: "#6B6B6B",
+  onDark2: "#D4D4D4",
+  clear: "transparent",
+  shade1: "rgba(38, 22, 21, 0.12)",
+  shade2: "rgba(38, 22, 21, 0.18)",
+  shade3: "rgba(38, 22, 21, 0.28)",
+  veil: "rgba(38, 22, 21, 0.62)",
+  veilStrong: "rgba(38, 22, 21, 0.88)"
+});
+
+export const pxTokens = Object.freeze({
+  "--px-yellow": pxPalette.yellow,
+  "--px-yellow-soft": pxPalette.yellowSoft,
+  "--px-water": pxPalette.water,
+  "--px-fire": pxPalette.fire,
+  "--px-bg": pxPalette.paper,
+  "--px-surface": pxPalette.white,
+  "--px-surface-2": pxPalette.surface2,
+  "--px-text": pxPalette.ink,
+  "--px-text-2": pxPalette.text2,
+  "--px-text-3": pxPalette.text3,
+  "--px-dark": pxPalette.ink,
+  "--px-on-dark": pxPalette.paper,
+  "--px-on-dark-2": pxPalette.onDark2,
+  "--px-on-accent": pxPalette.ink,
+  "--px-clear": pxPalette.clear,
+  "--px-veil": pxPalette.veil,
+  "--px-veil-strong": pxPalette.veilStrong,
+
+  "--px-font":
+    '"Pretendard", "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+  "--px-w-regular": "400",
+  "--px-w-medium": "500",
+  "--px-w-semibold": "600",
+
+  /* 플러스엑스 분류 글자 200px 700을 600으로 낮춘 대형 제목 */
+  "--px-mega-size": "clamp(4.25rem, 15vw, 30rem)",
+  "--px-mega-leading": "0.92",
+  "--px-mega-tracking": "-0.05em",
+  "--px-stroke": "clamp(1px, 0.14vw, 5px)",
+
+  /* 상세 title-xl 119.8px 500 -0.04em = 1440 폭의 8.32vw */
+  "--px-display-size": "clamp(2.375rem, 8.32vw, 20rem)",
+  "--px-display-leading": "1.02",
+  "--px-display-tracking": "-0.045em",
+
+  /* 상세 title-l 59.9px 600 -0.03em = 4.16vw */
+  "--px-heading-size": "clamp(1.75rem, 4.16vw, 10rem)",
+  "--px-heading-leading": "1.12",
+  "--px-heading-tracking": "-0.03em",
+
+  /* 상세 .title 33.7px 500 -0.02em = 2.34vw */
+  "--px-title-size": "clamp(1.375rem, 2.34vw, 5.6rem)",
+  "--px-title-leading": "1.36",
+  "--px-title-tracking": "-0.02em",
+
+  "--px-lead-size": "clamp(1.125rem, 1.56vw, 3.75rem)",
+  "--px-lead-leading": "1.6",
+
+  /* 본문 행간 1.7~2.0, 자간 -0.02em */
+  "--px-body-size": "clamp(1rem, 1.11vw, 2.67rem)",
+  "--px-body-leading": "1.8",
+  "--px-body-tracking": "-0.02em",
+
+  "--px-small-size": "clamp(0.875rem, 0.97vw, 2.33rem)",
+  "--px-small-leading": "1.6",
+
+  "--px-gutter": "clamp(1.25rem, 3.472vw, 8.333rem)",
+  "--px-section": "clamp(5rem, 11vw, 26rem)",
+  "--px-gap": "clamp(0.625rem, 0.694vw, 1.666rem)",
+  "--px-gap-2": "clamp(1.25rem, 2.08vw, 5rem)",
+  "--px-card-ratio": "200 / 323",
+  "--px-read": "46em",
+  "--px-form": "max(46rem, 52vw)",
+
+  "--px-radius": "4px",
+
+  "--px-shadow-0": "none",
+  "--px-shadow-1": `0 2px 8px ${pxPalette.shade1}`,
+  "--px-shadow-2": `0 12px 32px ${pxPalette.shade2}`,
+  "--px-shadow-3": `0 28px 72px ${pxPalette.shade3}`,
+
+  "--px-ease-card": "cubic-bezier(0.215, 0.61, 0.355, 1)",
+  "--px-ease-reveal": "cubic-bezier(0.45, 0, 0.55, 1)",
+  "--px-ease-slow": "cubic-bezier(0.19, 1, 0.22, 1)",
+  "--px-t-fade": "200ms",
+  "--px-t-card": "250ms",
+  "--px-t-wipe": "360ms",
+  "--px-t-wipe-delay": "50ms",
+  "--px-t-reveal": "600ms",
+  "--px-t-slow": "1100ms",
+  "--px-rise": "2.5rem",
+  "--px-lift": "-0.375rem",
+  "--px-press": "0.97",
+
+  "--px-control": "2.75rem",
+  "--px-choice": "3.5rem",
+  "--px-focus": "3px",
+  "--px-header-h": "clamp(4rem, 6.4vw, 12rem)",
+  "--px-layer-header": "40",
+  "--px-layer-menu": "60",
+  "--px-layer-skip": "100"
+});
+
+export function applyPxTokens(element = document.documentElement) {
+  for (const [name, value] of Object.entries(pxTokens)) {
     element.style.setProperty(name, value);
   }
 }

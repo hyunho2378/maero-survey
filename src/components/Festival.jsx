@@ -231,6 +231,9 @@ export default function Festival({ tracker }) {
   const boxRef = useRef(null);
 
   useEffect(() => {
+    let frameA = 0;
+    let frameB = 0;
+
     function reveal(id) {
       const box = boxRef.current;
 
@@ -244,8 +247,11 @@ export default function Festival({ tracker }) {
 
       setOpen(true);
 
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
+      window.cancelAnimationFrame(frameA);
+      window.cancelAnimationFrame(frameB);
+
+      frameA = window.requestAnimationFrame(() => {
+        frameB = window.requestAnimationFrame(() => {
           document.getElementById(id)?.scrollIntoView({
             block: "start",
             behavior: "auto"
@@ -274,6 +280,8 @@ export default function Festival({ tracker }) {
     document.addEventListener("click", onClick);
 
     return () => {
+      window.cancelAnimationFrame(frameA);
+      window.cancelAnimationFrame(frameB);
       window.removeEventListener("hashchange", readHash);
       document.removeEventListener("click", onClick);
     };

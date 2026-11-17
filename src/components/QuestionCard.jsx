@@ -55,8 +55,11 @@ export default function QuestionCard({
   const errorId = `${question.id}-error`;
   const requirementId = `${question.id}-requirement`;
 
+  const scaleLabelsId = `${question.id}-scale-labels`;
+
   const describedBy = [
     requirementId,
+    question.type === "scale" ? scaleLabelsId : "",
     question.hint ? hintId : "",
     error ? errorId : ""
   ]
@@ -189,9 +192,15 @@ export default function QuestionCard({
       </div>
 
       {question.type === "scale" && (
-        <div className="scale-labels">
-          <span>{question.low}</span>
-          <span>{question.high}</span>
+        <div className="scale-labels" id={scaleLabelsId}>
+          <span>
+            <span className="sr-only">1점 </span>
+            {question.low}
+          </span>
+          <span>
+            <span className="sr-only">5점 </span>
+            {question.high}
+          </span>
         </div>
       )}
 

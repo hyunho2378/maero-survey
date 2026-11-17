@@ -1,0 +1,135 @@
+/* 2026. 11. 10. M3 직접 작성: 관리 화면(?admin=1)을 공개 화면 팔레트(브랜드기획서 6-5)와 규칙에 맞춤
+   옐로 중심과 무채색, 물 파랑 일반 버튼 사용 0, 알약 모양과 점 무늬 장식 0, 굵기 400 500 600, 누르는 영역 44 이상 */
+:root {
+  --ax-yellow: #F4C418;
+  --ax-yellow-soft: #FFFB9C;
+  --ax-ink: #261615;
+  --ax-paper: #F9F9F9;
+  --ax-white: #FFFFFF;
+  --ax-text2: #555555;
+  --ax-radius: 8px;
+  --ax-shadow-1: 0 1px 2px rgba(38, 22, 21, 0.12), 0 2px 6px rgba(38, 22, 21, 0.08);
+  --ax-shadow-2: 0 4px 12px rgba(38, 22, 21, 0.18);
+}
+body {
+  background-color: var(--ax-paper);
+  background-image: none;
+  color: var(--ax-ink);
+}
+.admin-page,
+.admin-page h1,
+.admin-page h2,
+.admin-page h3,
+.admin-page p,
+.admin-page td,
+.admin-page th,
+.admin-page dt,
+.admin-page dd,
+.admin-page label,
+.admin-page .helper {
+  color: var(--ax-ink);
+}
+.admin-page h1 { font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; }
+.admin-page h2, .admin-page h3 { font-weight: 600; letter-spacing: -0.01em; }
+.admin-page strong, .admin-page b { font-weight: 600; }
+.admin-page .stat-card strong {
+  font-family: Pretendard, system-ui, sans-serif;
+  color: var(--ax-ink);
+  font-weight: 600;
+}
+.admin-page .text-blue { color: var(--ax-ink); }
+.admin-page .text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ax-ink);
+}
+.admin-page .button,
+.admin-page .button.button-blue {
+  min-height: 48px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--ax-radius);
+  background: var(--ax-yellow);
+  color: var(--ax-ink);
+  font-weight: 600;
+  box-shadow: var(--ax-shadow-1);
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.admin-page .button:hover { box-shadow: var(--ax-shadow-2); }
+.admin-page .button:disabled,
+.admin-page .button[aria-disabled="true"] {
+  background: var(--ax-white);
+  color: var(--ax-text2);
+  box-shadow: var(--ax-shadow-1);
+}
+.admin-page .button:focus-visible,
+.admin-page .ios-admin-segment:focus-visible,
+.admin-page .text-link:focus-visible,
+.admin-page input:focus-visible,
+.admin-page select:focus-visible {
+  outline: 3px solid var(--ax-ink);
+  outline-offset: 2px;
+}
+.admin-page .ios-admin-segments {
+  border: 0;
+  border-radius: var(--ax-radius);
+  background: var(--ax-white);
+  box-shadow: var(--ax-shadow-1);
+}
+.admin-page .ios-admin-segment:active:not(:disabled) { transform: none; }
+.admin-page .ios-admin-segment,
+:root body .admin-page .ios-admin-segment {
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--ax-radius);
+  background: transparent;
+  color: var(--ax-ink);
+  font-weight: 500;
+}
+.admin-page .ios-admin-segment[aria-pressed="true"],
+:root body .admin-page .ios-admin-segment[aria-pressed="true"],
+.admin-page .ios-admin-segment[aria-selected="true"],
+.admin-page .ios-admin-segment[aria-checked="true"] {
+  background: var(--ax-yellow);
+  color: var(--ax-ink);
+  font-weight: 600;
+}
+.admin-page .ios-admin-section,
+.admin-page .admin-toolbar {
+  box-shadow: none;
+  background: transparent;
+}
+.admin-page .ios-admin-group,
+.admin-page .ios-admin-empty,
+.admin-page .ios-admin-response,
+.admin-page .admin-notice,
+.admin-page .admin-login {
+  border: 0;
+  border-radius: var(--ax-radius);
+  box-shadow: var(--ax-shadow-1);
+}
+.admin-page .ios-admin-group { background: var(--ax-white); overflow: hidden; }
+.admin-page .stat-card { background: var(--ax-white); border: 0; }
+.admin-page .ios-admin-empty { background: var(--ax-white); }
+.admin-page .field-error { color: var(--ax-ink); font-weight: 600; }
+.admin-page input,
+.admin-page select {
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--ax-radius);
+  background: var(--ax-white);
+  color: var(--ax-ink);
+  box-shadow: var(--ax-shadow-1);
+}
+
+/* 버튼 누름 때 크기 변화로 화면이 튀지 않게 함 */
+:root body .admin-page .button:active:not(:disabled) { transform: none; }
+:root body .admin-page .admin-toolbar,
+:root body .admin-page .ios-admin-section {
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+:root body .admin-page .button:disabled { opacity: 1; color: var(--ax-text2); }

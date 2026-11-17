@@ -169,7 +169,6 @@ export function MotionButton() {
         className="button button-light"
         onClick={motion.toggle}
         disabled={motion.reduced}
-        aria-pressed={motion.enabled}
       >
         {motion.enabled
           ? "기기 기울임 해제"

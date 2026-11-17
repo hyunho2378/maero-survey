@@ -230,9 +230,7 @@
   word-break: keep-all;
   overflow-wrap: anywhere;
   box-shadow: var(--glass-rim-tint), var(--glass-tint-shadow);
-  transition:
-    transform var(--glass-press),
-    box-shadow var(--glass-press);
+  transition: transform var(--glass-press);
 }
 
 :root body .hero .hero-actions .button-yellow {

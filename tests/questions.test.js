@@ -14,14 +14,19 @@ import {
 function validAnswers() {
   return {
     ...initialAnswers(),
+    gender: "female",
+    age: "20s",
+    region: "chuncheon",
     awareness: "never",
+    souvenir: "yes",
     before: 2,
-    water: "not_watched",
-    fire: "not_watched",
+    water: "maero",
+    fire: "maero",
     keepsakes: [],
     maero: "basic",
-    after: 3,
-    companion: "unsure"
+    fit: 4,
+    price: "p7900",
+    comment: ""
   };
 }
 

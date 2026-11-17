@@ -1,13 +1,63 @@
 export const questions = {
+  gender: {
+    id: "gender",
+    type: "radio",
+    required: true,
+    title: "성별을 알려 주세요.",
+    options: [
+      { value: "female", label: "여성" },
+      { value: "male", label: "남성" }
+    ]
+  },
+
+  age: {
+    id: "age",
+    type: "radio",
+    required: true,
+    title: "연령대를 알려 주세요.",
+    options: [
+      { value: "teen", label: "10대" },
+      { value: "20s", label: "20대" },
+      { value: "30s", label: "30대" },
+      { value: "40s", label: "40대" },
+      { value: "50s", label: "50대" },
+      { value: "60s", label: "60대 이상" }
+    ]
+  },
+
+  region: {
+    id: "region",
+    type: "radio",
+    required: true,
+    title: "현재 거주하시는 지역은 어디인가요?",
+    options: [
+      { value: "chuncheon", label: "춘천" },
+      { value: "gangwon", label: "강원도 내 춘천 외 지역" },
+      { value: "capital", label: "서울, 경기, 인천" },
+      { value: "other", label: "그 외 지역" }
+    ]
+  },
+
   awareness: {
     id: "awareness",
     type: "radio",
     required: true,
-    title: "춘천마임축제 인지 정도",
+    title: "춘천마임축제에 대해 들어 보셨나요?",
     options: [
-      { value: "never", label: "처음 접한 축제" },
-      { value: "name", label: "이름만 들어본 축제" },
-      { value: "know", label: "내용까지 알고 있던 축제" }
+      { value: "never", label: "처음 들어봐요" },
+      { value: "name", label: "이름은 들어봤어요" },
+      { value: "know", label: "어떤 축제인지 알아요" }
+    ]
+  },
+
+  souvenir: {
+    id: "souvenir",
+    type: "radio",
+    required: true,
+    title: "최근 2년 안에 지역 축제나 관광지에서 기념품을 구매해 보신 적이 있으신가요?",
+    options: [
+      { value: "yes", label: "네, 구매해 본 적이 있어요" },
+      { value: "no", label: "아니요, 구매해 본 적이 없어요" }
     ]
   },
 
@@ -15,22 +65,20 @@ export const questions = {
     id: "before",
     type: "scale",
     required: true,
-    title: "장면 시청 전 방문 의향",
-    hint: "문항을 처음 만난 순간의 마음에 해당하는 숫자 선택",
-    low: "별로 가고 싶지 않은 마음",
-    high: "꼭 가 보고 싶은 마음"
+    title: "춘천마임축제에서 캐릭터 기념품을 판다면 구매하고 싶으신가요?",
+    low: "사고 싶지 않아요",
+    high: "꼭 사고 싶어요"
   },
 
   water: {
     id: "water",
     type: "radio",
     required: true,
-    title: "물의 장면을 본 뒤 달라진 마음",
+    title: "개막난장 영상에서 어떤 점이 가장 마음에 드셨나요?",
     options: [
-      { value: "join", label: "그 안에 함께 있는 경험 희망" },
-      { value: "watch", label: "현장에서 구경하고 싶은 마음" },
-      { value: "unchanged", label: "아직 큰 변화 없는 상태" },
-      { value: "not_watched", label: "영상 미시청" }
+      { value: "join", label: "함께 뛰어놀고 싶은 분위기" },
+      { value: "watch", label: "보기만 해도 시원한 장면" },
+      { value: "maero", label: "블루 마에로가 잘 어울리는 장면" }
     ]
   },
 
@@ -38,21 +86,29 @@ export const questions = {
     id: "fire",
     type: "radio",
     required: true,
-    title: "불과 밤의 장면을 본 뒤 달라진 마음",
+    title: "기록영상에서 어떤 점이 가장 마음에 드셨나요?",
     options: [
-      { value: "join", label: "그 분위기를 직접 느끼는 체험 희망" },
-      { value: "watch", label: "조금 더 살펴볼 의향" },
-      { value: "unchanged", label: "아직 큰 변화 없는 상태" },
-      { value: "not_watched", label: "영상을 보지 못한 상태" }
+      { value: "join", label: "그 열기를 직접 느껴 보고 싶어요" },
+      { value: "watch", label: "밤을 밝히는 장면이 멋져요" },
+      { value: "maero", label: "레드 마에로가 잘 어울리는 장면" }
     ]
+  },
+
+  fit: {
+    id: "fit",
+    type: "scale",
+    required: true,
+    title: "영상 속 장면과 마에로와 삐삐로 그림이 잘 어울린다고 느끼셨나요?",
+    low: "어울리지 않아요",
+    high: "매우 잘 어울려요"
   },
 
   keepsakes: {
     id: "keepsakes",
     type: "checkbox",
     required: false,
-    title: "기억하고 싶은 물건 선택",
-    hint: "복수 선택 가능, 미선택 시 다음 문항으로 이동 가능함.",
+    title: "위 그림으로 만든다면 갖고 싶은 기념품을 모두 골라 주세요.",
+    hint: "여러 개를 골라도 되고, 마음에 드는 게 없으면 건너뛰어도 돼요.",
     options: [
       { value: "keyring", label: "키링" },
       { value: "postcard", label: "엽서" },
@@ -65,49 +121,51 @@ export const questions = {
     id: "maero",
     type: "radio",
     required: true,
-    title: "가장 마음에 드는 마에로 선택",
+    title: "가장 마음에 드는 마에로를 골라 주세요.",
     options: [
-      { value: "basic", label: "처음의 마에로" },
-      { value: "blue", label: "물을 지난 마에로" },
-      { value: "red", label: "불을 지난 마에로" }
+      { value: "basic", label: "기본 마에로" },
+      { value: "blue", label: "블루 마에로" },
+      { value: "red", label: "레드 마에로" }
     ]
   },
 
-  after: {
-    id: "after",
-    type: "scale",
-    required: true,
-    title: "장면 시청 후 방문 의향",
-    hint: "이 페이지에서 만난 장면을 떠올리며 해당 숫자 선택",
-    low: "별로 가고 싶지 않은 마음",
-    high: "꼭 가 보고 싶은 마음"
-  },
-
-  companion: {
-    id: "companion",
+  price: {
+    id: "price",
     type: "radio",
     required: true,
-    title: "동행 희망 대상 선택",
+    title: "마에로 키링을 구매한다면 얼마까지 가능하신가요?",
     options: [
-      { value: "alone", label: "혼자 방문" },
-      { value: "friends", label: "친구와 방문" },
-      { value: "family", label: "가족과 방문" },
-      { value: "partner", label: "연인과 방문" },
-      { value: "unsure", label: "아직 확실하지 않은 상태" }
+      { value: "p5900", label: "5,900원까지" },
+      { value: "p6900", label: "6,900원까지" },
+      { value: "p7900", label: "7,900원까지" },
+      { value: "p8900", label: "8,900원까지" },
+      { value: "p9900", label: "9,900원 이상도 괜찮아요" }
     ]
+  },
+  comment: {
+    id: "comment",
+    type: "text",
+    required: false,
+    title: "마에로와 삐삐로, 기념품에 바라는 점이 있다면 자유롭게 적어 주세요.",
+    maxLength: 500
   }
 };
 
 export function initialAnswers() {
   return {
+    gender: "",
+    age: "",
+    region: "",
     awareness: "",
+    souvenir: "",
     before: null,
     water: "",
     fire: "",
     keepsakes: [],
     maero: "",
-    after: null,
-    companion: "",
+    fit: null,
+    price: "",
+    comment: "",
     email: "",
     emailConsent: false
   };
@@ -122,9 +180,17 @@ export function validateAnswers(
   for (const question of Object.values(questions)) {
     const value = answers[question.id];
 
+    if (question.type === "text") {
+      if (typeof value !== "string" || value.length > (question.maxLength || 500)) {
+        errors[question.id] = "500자 안으로 적어 주세요.";
+      }
+
+      continue;
+    }
+
     if (question.type === "scale") {
       if (!Number.isInteger(value) || value < 1 || value > 5) {
-        errors[question.id] = "1부터 5까지 숫자 하나 선택 필요";
+        errors[question.id] = "1부터 5까지 숫자 하나를 골라 주세요.";
       }
 
       continue;
@@ -140,14 +206,14 @@ export function validateAnswers(
         value.some((item) => !validValues.includes(item)) ||
         new Set(value).size !== value.length
       ) {
-        errors[question.id] = "선택 항목 재확인 필요";
+        errors[question.id] = "선택한 항목을 다시 확인해 주세요.";
       }
 
       continue;
     }
 
     if (!validValues.includes(value)) {
-      errors[question.id] = "항목 하나 선택 필요함.";
+      errors[question.id] = "하나를 골라 주세요.";
     }
   }
 
@@ -155,16 +221,16 @@ export function validateAnswers(
 
   if (email) {
     if (!allowEmail) {
-      errors.email = "현재 이메일 수신 준비 중임.";
+      errors.email = "지금은 이메일을 받지 않아요.";
     } else if (
       email.length > 254 ||
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
     ) {
-      errors.email = "이메일 주소 형식 확인 요청";
+      errors.email = "이메일 주소를 다시 확인해 주세요.";
     }
 
     if (answers.emailConsent !== true) {
-      errors.emailConsent = "이메일을 남길 경우 동의 필요함.";
+      errors.emailConsent = "이메일을 남기려면 동의가 필요해요.";
     }
   }
 
@@ -176,7 +242,7 @@ export function answerLabel(id, value) {
 
   if (!question) return String(value ?? "");
 
-  if (question.type === "scale") {
+  if (question.type === "scale" || question.type === "text") {
     return value == null ? "" : String(value);
   }
 

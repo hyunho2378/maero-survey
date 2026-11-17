@@ -191,9 +191,9 @@ export const videos = [
     key: "water",
     id: "ggng8MTKaH0",
     anchor: "water-video",
-    title: "물의 장면 감상",
+    title: "개막난장 아!水라장",
     description:
-      "움직이는 사람들과 물의 장면을 살펴보는 영상임. 드는 마음을 바로 아래에 기록함.",
+      "2026 춘천마임축제 개막 행사 영상이에요. 본 만큼만 느낀 대로 답해 주세요.",
     tone: "blue",
     scene: "scene_water.jpg",
     character: "maero_blue"
@@ -202,9 +202,9 @@ export const videos = [
     key: "fire",
     id: "vWOqk1XbdB4",
     anchor: "fire-video",
-    title: "불과 밤의 장면 감상",
+    title: "2026 춘천마임축제 기록영상",
     description:
-      "빛과 몸짓이 함께 있는 장면을 담은 영상임. 직접 그곳에 있을 때의 느낌 상상",
+      "축제 현장을 담은 기록영상이에요. 본 만큼만 느낀 대로 답해 주세요.",
     tone: "red",
     scene: "scene_fire.jpg",
     character: "maero_red"

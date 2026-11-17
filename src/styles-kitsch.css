@@ -1784,6 +1784,11 @@ body:has(
     transform: translateY(var(--k-lift));
   }
 
+  .button:hover:active:not(:disabled),
+  .source-link:hover:active {
+    transform: scale(var(--k-press));
+  }
+
   .choice:hover:not(:has(input:disabled)) {
     transform: translateY(var(--k-lift));
   }

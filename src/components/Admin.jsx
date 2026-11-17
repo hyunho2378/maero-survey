@@ -42,6 +42,10 @@ function average(records, key) {
 }
 
 function formatDate(value) {
+  if (value === undefined || value === null || value === "") {
+    return "확인 불가";
+  }
+
   const date = new Date(value);
 
   if (!Number.isFinite(date.getTime())) {
@@ -285,10 +289,16 @@ function ResponseList({ records }) {
             "마에로",
             displayAnswer("maero", answers.maero)
           ],
+          ["성별", displayAnswer("gender", answers.gender)],
+          ["연령대", displayAnswer("age", answers.age)],
+          ["거주 지역", displayAnswer("region", answers.region)],
+          ["기념품 구매 경험", displayAnswer("souvenir", answers.souvenir)],
+          ["장면과 어울림", displayAnswer("fit", answers.fit)],
           [
-            "동행",
-            displayAnswer("companion", answers.companion)
+            "키링 적정 가격",
+            displayAnswer("price", answers.price)
           ],
+          ["바라는 점", answers.comment || "없음"],
           ["물 재생 초", playback(record, "ggng8MTKaH0")],
           ["불 재생 초", playback(record, "vWOqk1XbdB4")],
           [
@@ -311,7 +321,13 @@ function ResponseList({ records }) {
           ]
         ];
 
-        const receivedDate = new Date(record.receivedAt);
+        const hasReceivedAt =
+          record.receivedAt !== undefined &&
+          record.receivedAt !== null &&
+          record.receivedAt !== "";
+        const receivedDate = new Date(
+          hasReceivedAt ? record.receivedAt : NaN
+        );
         const validDate = Number.isFinite(receivedDate.getTime());
 
         return (
@@ -509,10 +525,6 @@ export default function Admin() {
       </a>
 
       <header className="section-heading">
-        <p className="eyebrow text-blue">
-          버터와플 관리 화면
-        </p>
-
         <h1>남겨 준 마음 확인</h1>
 
         <p>

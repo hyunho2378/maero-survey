@@ -144,7 +144,6 @@ export default function CollectCard({ character }) {
         type="button"
         className="cc-flip"
         aria-controls={deckId}
-        aria-pressed={flipped}
         aria-label={`${character.title}, ${
           flipped ? "앞면 확인" : "뒷면 확인"
         }`}
