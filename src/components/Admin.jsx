@@ -5,8 +5,8 @@ import {
   useState
 } from "react";
 
-import { isRemote } from "../config.js";
-import { answerLabel } from "../data/questions.js";
+import { config, isRemote } from "../config.js";
+import { answerLabel, questions } from "../data/questions.js";
 import { loadResponses } from "../lib/submit.js";
 import { downloadCSV } from "../lib/csv.js";
 
@@ -384,6 +384,73 @@ function ResponseList({ records }) {
   );
 }
 
+
+function PublicSummary() {
+  const [data, setData] = useState(null);
+  const [err, setErr] = useState("");
+
+  async function refresh() {
+    if (!isRemote) return;
+    try {
+      const sep = config.endpoint.includes("?") ? "&" : "?";
+      const res = await fetch(`${config.endpoint}${sep}summary=1`, { cache: "no-store" });
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.error || "현황 조회 실패");
+      setData(json);
+      setErr("");
+    } catch (caught) {
+      setErr(caught?.message || "현황 조회 실패");
+    }
+  }
+
+  useEffect(() => {
+    refresh();
+    const timer = window.setInterval(refresh, 30000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  if (!isRemote) return null;
+  if (err) return <p className="helper">{err}</p>;
+  if (!data) return <p className="helper">현황을 불러오는 중</p>;
+
+  const order = ["gender", "age", "region", "awareness", "souvenir", "before", "water", "fire", "maero", "fit", "keepsakes", "price"];
+  const lastText = data.last
+    ? new Date(data.last).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })
+    : "없음";
+
+  return (
+    <section className="public-summary" aria-label="응답 현황">
+      <div className="ps-totals">
+        <div className="ps-total"><span>전체 응답</span><strong>{data.total}</strong></div>
+        <div className="ps-total"><span>오늘 응답</span><strong>{data.today}</strong></div>
+        <div className="ps-total"><span>마지막 응답</span><strong className="ps-small">{lastText}</strong></div>
+      </div>
+      {order.map((id) => {
+        const q = questions[id];
+        const c = data.counts?.[id] || {};
+        const keys = q?.options ? q.options.map((o) => o.value) : Object.keys(c).sort();
+        const sum = Object.values(c).reduce((a, b) => a + b, 0) || 1;
+        return (
+          <div className="ps-q" key={id}>
+            <h3>{q?.title || id}</h3>
+            {keys.map((k) => {
+              const n = c[k] || 0;
+              const pct = Math.round((n / sum) * 100);
+              return (
+                <div className="ps-row" key={k}>
+                  <span className="ps-label">{answerLabel(id, k)}</span>
+                  <span className="ps-bar"><span style={{ width: `${pct}%` }} /></span>
+                  <span className="ps-num">{n}명 {pct}%</span>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </section>
+  );
+}
+
 export default function Admin() {
   const [token, setToken] = useState("");
   const [records, setRecords] = useState([]);
@@ -529,10 +596,12 @@ export default function Admin() {
 
         <p>
           {isRemote
-            ? "서버에 저장된 응답을 관리자 토큰으로 확인"
+            ? "문항별 현황은 바로 보이고, 응답 원문은 관리자 토큰으로 확인"
             : "이 브라우저에 저장된 응답만 표시함. 다른 기기의 응답은 합산 제외임."}
         </p>
       </header>
+
+      <PublicSummary />
 
       <form className="admin-login" onSubmit={load}>
         {isRemote && (

@@ -319,6 +319,30 @@ const server = http.createServer(async (req, res) => {
       return send(res, 403, { ok: false, error: "허용되지 않은 출처예요." });
     }
 
+    if (req.method === "GET" && url.searchParams.get("summary") === "1") {
+      // 비밀번호 없이 보는 현황: 문항별 응답 수만 보냄. 자유 서술과 기록 원문은 보내지 않음.
+      const records = await readAll();
+      const keys = ["gender", "age", "region", "awareness", "souvenir", "before", "water", "fire", "maero", "fit", "keepsakes", "price"];
+      const counts = {};
+      for (const k of keys) counts[k] = {};
+      const kst = (iso) => new Date(Date.parse(iso) + 9 * 3600000).toISOString().slice(0, 10);
+      const todayKey = kst(new Date().toISOString());
+      let today = 0;
+      for (const r of records) {
+        if (r.receivedAt && kst(r.receivedAt) === todayKey) today += 1;
+        const ans = r.answers || {};
+        for (const k of keys) {
+          const v = ans[k];
+          for (const item of Array.isArray(v) ? v : [v]) {
+            if (item == null || item === "") continue;
+            counts[k][String(item)] = (counts[k][String(item)] || 0) + 1;
+          }
+        }
+      }
+      const last = records.reduce((m, r) => (r.receivedAt && r.receivedAt > m ? r.receivedAt : m), "");
+      return send(res, 200, { ok: true, total: records.length, today, last, counts });
+    }
+
     if (req.method === "GET") {
       if (!tokenOk(url.searchParams.get("admin"))) return send(res, 401, { ok: false, error: "관리자 권한을 확인해 주세요." });
       const records = await readAll();

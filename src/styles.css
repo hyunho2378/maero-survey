@@ -2026,3 +2026,19 @@ th:first-child {
     box-shadow: var(--shadow);
   }
 }
+
+/* 비밀번호 없이 보는 응답 현황 */
+.public-summary { display: grid; gap: 12px; margin: 16px 0 24px; }
+.ps-totals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.ps-total { background: #fff; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); display: grid; gap: 4px; }
+.ps-total span { font-size: 13px; line-height: 1.4; color: #555; }
+.ps-total strong { font-size: 28px; line-height: 1.2; font-weight: 600; color: #111; }
+.ps-total strong.ps-small { font-size: 16px; line-height: 1.4; }
+.ps-q { background: #fff; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); display: grid; gap: 8px; }
+.ps-q h3 { margin: 0 0 4px; font-size: 15px; line-height: 1.5; font-weight: 600; }
+.ps-row { display: grid; grid-template-columns: minmax(0, 8.5em) minmax(0, 1fr) auto; align-items: center; gap: 8px; font-size: 14px; line-height: 1.4; }
+.ps-label { overflow-wrap: anywhere; }
+.ps-bar { height: 10px; background: #eef1fd; border-radius: 5px; overflow: hidden; }
+.ps-bar span { display: block; height: 100%; background: #2B4BF2; border-radius: 5px; }
+.ps-num { font-variant-numeric: tabular-nums; color: #333; white-space: nowrap; }
+@media (max-width: 400px) { .ps-row { grid-template-columns: minmax(0, 6.5em) minmax(0, 1fr) auto; } .ps-total strong { font-size: 22px; } }
