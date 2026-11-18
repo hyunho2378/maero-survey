@@ -1,4 +1,4 @@
-const VIDEO_IDS = ["ggng8MTKaH0", "vWOqk1XbdB4"];
+const VIDEO_IDS = ["ggng8MTKaH0", "LnEUYDxIkxk"];
 
 function copy(value) {
   return JSON.parse(JSON.stringify(value));

@@ -190,6 +190,7 @@ export const videos = [
   {
     key: "water",
     id: "ggng8MTKaH0",
+    startAt: 76,
     anchor: "water-video",
     title: "개막난장 아!水라장",
     description:
@@ -200,11 +201,12 @@ export const videos = [
   },
   {
     key: "fire",
-    id: "vWOqk1XbdB4",
+    id: "LnEUYDxIkxk",
+    startAt: 65,
     anchor: "fire-video",
-    title: "2026 춘천마임축제 기록영상",
+    title: "2026 춘천마임축제 밤샘난장 도깨비난장",
     description:
-      "축제 현장을 담은 기록영상이에요. 본 만큼만 느낀 대로 답해 주세요.",
+      "2026 춘천마임축제 밤샘난장 도깨비난장 영상이에요. 본 만큼만 느낀 대로 답해 주세요.",
     tone: "red",
     scene: "scene_fire.jpg",
     character: "maero_red"

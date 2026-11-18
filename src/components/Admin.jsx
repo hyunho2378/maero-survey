@@ -300,7 +300,7 @@ function ResponseList({ records }) {
           ],
           ["바라는 점", answers.comment || "없음"],
           ["물 재생 초", playback(record, "ggng8MTKaH0")],
-          ["불 재생 초", playback(record, "vWOqk1XbdB4")],
+          ["불 재생 초", playback(record, "LnEUYDxIkxk")],
           [
             "본 사진",
             record.evidence?.photos?.viewedIds?.length || 0

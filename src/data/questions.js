@@ -86,7 +86,7 @@ export const questions = {
     id: "fire",
     type: "radio",
     required: true,
-    title: "기록영상에서 어떤 점이 가장 마음에 드셨나요?",
+    title: "도깨비난장 영상에서 어떤 점이 가장 마음에 드셨나요?",
     options: [
       { value: "join", label: "그 열기를 직접 느껴 보고 싶어요" },
       { value: "watch", label: "밤을 밝히는 장면이 멋져요" },

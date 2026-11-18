@@ -20,7 +20,7 @@ const RATE_LIMIT = Number(process.env.RATE_LIMIT || 30);
 const SCHEMA_VERSION = 1;
 const PRIVACY_VERSION = "2026-11-02";
 const RETENTION_DAYS = 90;
-const VIDEO_IDS = ["ggng8MTKaH0", "vWOqk1XbdB4"];
+const VIDEO_IDS = ["ggng8MTKaH0", "LnEUYDxIkxk"];
 const ENUMS = {
   gender: ["female", "male"],
   age: ["teen", "20s", "30s", "40s", "50s", "60s"],

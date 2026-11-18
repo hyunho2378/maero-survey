@@ -32,12 +32,27 @@ export default function PxVideo({ video, tracker }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         inView = Boolean(entry && entry.isIntersecting && entry.intersectionRatio >= 0.5);
+        if (inView && el.paused && !el.ended && !el.dataset.userPaused) {
+          el.muted = true;
+          const tried = el.play();
+          if (tried && tried.catch) tried.catch(() => {});
+        } else if (!inView && !el.paused) {
+          el.pause();
+        }
       },
       { threshold: [0, 0.5] }
     );
     observer.observe(el);
 
     function onLoaded() {
+      if (!el.dataset.started && video.startAt) {
+        el.dataset.started = "1";
+        try {
+          el.currentTime = video.startAt;
+        } catch {
+          /* 시작 위치를 못 맞추면 처음부터 재생 */
+        }
+      }
       if (loggedLoad) return;
       loggedLoad = true;
       record("videoLoaded", video.id);
@@ -48,6 +63,13 @@ export default function PxVideo({ video, tracker }) {
     }
     function reset() {
       previous = null;
+    }
+    function onPauseEvent() {
+      previous = null;
+      if (inView && !document.hidden) el.dataset.userPaused = "1";
+    }
+    function onPlayEvent() {
+      delete el.dataset.userPaused;
     }
     function sample() {
       const playing = !el.paused && !el.ended && el.readyState >= 2;
@@ -82,7 +104,8 @@ export default function PxVideo({ video, tracker }) {
     el.addEventListener("error", onError);
     el.addEventListener("seeking", reset);
     el.addEventListener("ratechange", reset);
-    el.addEventListener("pause", reset);
+    el.addEventListener("pause", onPauseEvent);
+    el.addEventListener("play", onPlayEvent);
     document.addEventListener("visibilitychange", onVisibility);
     const timer = window.setInterval(sample, 250);
     if (el.readyState >= 1) onLoaded();
@@ -94,7 +117,8 @@ export default function PxVideo({ video, tracker }) {
       el.removeEventListener("error", onError);
       el.removeEventListener("seeking", reset);
       el.removeEventListener("ratechange", reset);
-      el.removeEventListener("pause", reset);
+      el.removeEventListener("pause", onPauseEvent);
+      el.removeEventListener("play", onPlayEvent);
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [tracker, video]);
@@ -118,6 +142,7 @@ export default function PxVideo({ video, tracker }) {
           src={src}
           poster={poster}
           controls
+          muted
           playsInline
           preload="metadata"
           controlsList="nodownload noplaybackrate"
