@@ -414,39 +414,62 @@ function PublicSummary() {
   if (!data) return <p className="helper">현황을 불러오는 중</p>;
 
   const order = ["gender", "age", "region", "awareness", "souvenir", "before", "water", "fire", "maero", "fit", "keepsakes", "price"];
+  const short = {
+    gender: "성별", age: "연령대", region: "거주 지역", awareness: "춘천마임축제 인지",
+    souvenir: "최근 2년 기념품 구매 경험", before: "캐릭터 기념품 구매 의향", water: "개막난장 영상에서 마음에 든 점",
+    fire: "도깨비난장 영상에서 마음에 든 점", maero: "가장 마음에 드는 마에로", fit: "장면과 캐릭터 어울림",
+    keepsakes: "갖고 싶은 기념품(복수 선택)", price: "키링 지불 가능 금액"
+  };
   const lastText = data.last
     ? new Date(data.last).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })
     : "없음";
+  const total = data.total || 0;
+  const cnt = (id, keys) => keys.reduce((a, k) => a + (data.counts?.[id]?.[k] || 0), 0);
+  const pctOf = (n) => (total ? Math.round((n / total) * 1000) / 10 : 0);
+  const kpis = [
+    { label: "전체 응답", value: `${total}명`, sub: `마지막 ${lastText}` },
+    { label: "장면과 캐릭터 어울림 4~5점", value: `${pctOf(cnt("fit", ["4", "5"]))}%`, sub: `${cnt("fit", ["4", "5"])}명` },
+    { label: "캐릭터 기념품 구매 의향 4~5점", value: `${pctOf(cnt("before", ["4", "5"]))}%`, sub: `${cnt("before", ["4", "5"])}명` },
+    { label: "키링을 갖고 싶다", value: `${pctOf(cnt("keepsakes", ["keyring"]))}%`, sub: `${cnt("keepsakes", ["keyring"])}명` },
+    { label: "키링 7,900원 이상도 괜찮다", value: `${pctOf(cnt("price", ["p7900", "p8900", "p9900"]))}%`, sub: `${cnt("price", ["p7900", "p8900", "p9900"])}명` }
+  ];
 
   return (
     <section className="public-summary" aria-label="응답 현황">
-      <div className="ps-totals">
-        <div className="ps-total"><span>전체 응답</span><strong>{data.total}</strong></div>
-        <div className="ps-total"><span>오늘 응답</span><strong>{data.today}</strong></div>
-        <div className="ps-total"><span>마지막 응답</span><strong className="ps-small">{lastText}</strong></div>
-      </div>
-      {order.map((id) => {
-        const q = questions[id];
-        const c = data.counts?.[id] || {};
-        const keys = q?.options ? q.options.map((o) => o.value) : Object.keys(c).sort();
-        const sum = Object.values(c).reduce((a, b) => a + b, 0) || 1;
-        return (
-          <div className="ps-q" key={id}>
-            <h3>{q?.title || id}</h3>
-            {keys.map((k) => {
-              const n = c[k] || 0;
-              const pct = Math.round((n / sum) * 100);
-              return (
-                <div className="ps-row" key={k}>
-                  <span className="ps-label">{answerLabel(id, k)}</span>
-                  <span className="ps-bar"><span style={{ width: `${pct}%` }} /></span>
-                  <span className="ps-num">{n}명 {pct}%</span>
-                </div>
-              );
-            })}
+      <div className="ps-kpis">
+        {kpis.map((k) => (
+          <div className="ps-kpi" key={k.label}>
+            <span className="ps-kpi-label">{k.label}</span>
+            <strong className="ps-kpi-value">{k.value}</strong>
+            <span className="ps-kpi-sub">{k.sub}</span>
           </div>
-        );
-      })}
+        ))}
+      </div>
+      <div className="ps-grid">
+        {order.map((id) => {
+          const q = questions[id];
+          const c = data.counts?.[id] || {};
+          const keys = q?.options ? q.options.map((o) => o.value) : q?.type === "scale" ? ["1", "2", "3", "4", "5"] : Object.keys(c).sort();
+          const base = q?.type === "checkbox" ? total || 1 : Object.values(c).reduce((a, b) => a + b, 0) || 1;
+          const max = Math.max(1, ...keys.map((k) => c[k] || 0));
+          return (
+            <div className="ps-q" key={id}>
+              <h3>{short[id] || q?.title || id}</h3>
+              {keys.map((k) => {
+                const n = c[k] || 0;
+                const pct = Math.round((n / base) * 100);
+                return (
+                  <div className={`ps-row ${n === max && n > 0 ? "is-top" : ""}`} key={k}>
+                    <span className="ps-label">{answerLabel(id, k)}</span>
+                    <span className="ps-bar"><span style={{ width: `${pct}%` }} /></span>
+                    <span className="ps-num">{pct}%<em>{n}</em></span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }
@@ -586,13 +609,13 @@ export default function Admin() {
     view === "today" ? todayRecords : records;
 
   return (
-    <main className="admin-page container">
+    <main className="admin-page container is-wide">
       <a className="text-link" href="./">
         설문 화면으로 이동
       </a>
 
       <header className="section-heading">
-        <h1>남겨 준 마음 확인</h1>
+        <h1>마에로와 삐삐로 관객 설문 응답 현황</h1>
 
         <p>
           {isRemote
