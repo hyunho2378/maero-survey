@@ -1081,3 +1081,8 @@ html:has(.px-formpage) { scroll-behavior: auto; }
 /* 점수 칸은 왼쪽 끝에서 오른쪽 끝까지 */
 .px-formpage .px-scale { max-width: none; width: 100%; display: flex; justify-content: space-between; gap: 0; }
 .px-formpage .px-scale-labels { max-width: none; width: 100%; display: flex; justify-content: space-between; }
+
+/* 문항 제목: fieldset 대신 일반 블록. 모바일 사파리에서 테두리에 걸리던 문제 */
+.px-formpage .px-q-legend { float: none; display: block; width: 100%; margin: 0; padding: 0; }
+.px-formpage .px-q-legend + * { clear: none; }
+.px-formpage .px-mockup img { object-fit: cover; background: none; }

@@ -62,17 +62,19 @@ export default function PxQuestion({ question, number, value, onChange, error })
   }
 
   return (
-    <fieldset
+    <div
       id={`q-${question.id}`}
+      role="group"
+      aria-labelledby={`${question.id}-title`}
       className={`px-q survey-question ${error ? "has-error" : ""}`}
       aria-describedby={describedBy}
       data-track-section={`question-${question.id}`}
     >
-      <legend className="px-q-legend">
+      <div className="px-q-legend">
         <span className="px-q-number" aria-hidden="true">
           {String(number).padStart(2, "0")}
         </span>
-        <span className="px-q-title">
+        <span id={`${question.id}-title`} className="px-q-title">
           {question.title}
           {question.required && (
             <span className="px-star" aria-hidden="true">
@@ -80,7 +82,7 @@ export default function PxQuestion({ question, number, value, onChange, error })
             </span>
           )}
         </span>
-      </legend>
+      </div>
 
       <p id={requirementId} className="px-q-req">
         {question.required ? "필수" : "선택"}
@@ -156,6 +158,6 @@ export default function PxQuestion({ question, number, value, onChange, error })
           {error}
         </p>
       )}
-    </fieldset>
+    </div>
   );
 }
