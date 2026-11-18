@@ -106,9 +106,9 @@ export const questions = {
   keepsakes: {
     id: "keepsakes",
     type: "checkbox",
-    required: false,
+    required: true,
     title: "위 그림으로 만든다면 갖고 싶은 기념품을 모두 골라 주세요.",
-    hint: "여러 개를 골라도 되고, 마음에 드는 게 없으면 건너뛰어도 돼요.",
+    hint: "여러 개를 골라도 돼요.",
     options: [
       { value: "keyring", label: "키링" },
       { value: "postcard", label: "엽서" },
@@ -201,6 +201,10 @@ export function validateAnswers(
     );
 
     if (question.type === "checkbox") {
+      if (question.required && Array.isArray(value) && value.length === 0) {
+        errors[question.id] = "하나 이상 골라 주세요.";
+        continue;
+      }
       if (
         !Array.isArray(value) ||
         value.some((item) => !validValues.includes(item)) ||

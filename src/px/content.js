@@ -205,7 +205,7 @@ export const characterIntro = {
 
 export const surveyCopy = {
   label: "관심 설문",
-  title: "춘천마임축제 영상 감상과|기념품 설문조사",
+  title: "춘천마임축제 기념품 설문조사",
   intro: "영상 두 편을 보고 문항 8개에 답하는 설문이에요.|이름과 전화번호는 받지 않아요.",
   required: "기억에 남기고 싶은 물건 문항 외에는 모두 답해야 제출할 수 있어요.",
   image: "img/orig/maero_basic.png",

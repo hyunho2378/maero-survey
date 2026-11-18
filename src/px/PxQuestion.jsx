@@ -152,7 +152,13 @@ export default function PxQuestion({ question, number, value, onChange, error })
 
 
 
-      {error && (
+      {question.required && (
+        <p id={errorId} className={`px-q-error ${error ? "" : "is-empty"}`} aria-live="polite">
+          {error ? <ErrorIcon /> : null}
+          {error || "\u00a0"}
+        </p>
+      )}
+      {!question.required && error && (
         <p id={errorId} className="px-q-error">
           <ErrorIcon />
           {error}

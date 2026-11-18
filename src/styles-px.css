@@ -1086,3 +1086,18 @@ html:has(.px-formpage) { scroll-behavior: auto; }
 .px-formpage .px-q-legend { float: none; display: block; width: 100%; margin: 0; padding: 0; }
 .px-formpage .px-q-legend + * { clear: none; }
 .px-formpage .px-mockup img { object-fit: cover; background: none; }
+
+/* 2026. 11. 18. 선택과 호버 때 움직임 없음, 오류 줄 자리 고정, 장면 이름 */
+.px-formpage .px-choice, .px-formpage .px-choice:hover, .px-formpage .px-choice:active, .px-formpage .px-choice.is-selected,
+.px-formpage .px-mark, .px-formpage .px-choice:hover .px-mark, .px-formpage .px-choice.is-selected .px-mark,
+.px-formpage .px-choice-picture img, .px-formpage .px-choice.is-selected .px-choice-picture img {
+  transform: none; transition: none;
+}
+.px-formpage .px-options.is-pictures .px-choice { box-shadow: 0 0 0 1px transparent; }
+.px-formpage .px-q-error { display: flex; align-items: center; gap: 6px; min-height: 20px; margin: 0; line-height: 20px; }
+.px-formpage .px-q-error.is-empty { visibility: hidden; }
+.px-formpage .px-scene-cap { grid-column: 1 / -1; display: grid; gap: 2px; padding: 0 0 4px; }
+.px-formpage .px-scene-name { font-size: 17px; font-weight: 700; line-height: 1.4; color: var(--g-strong); }
+.px-formpage .px-scene-sub { font-size: 14px; line-height: 1.5; color: var(--g-text); }
+.px-formpage .px-options.is-pictures .px-choice, .px-formpage .px-options.is-pictures .px-choice:hover,
+.px-formpage .px-options.is-pictures .px-choice:active, .px-formpage .px-options.is-pictures .px-choice.is-selected { gap: 12px; }

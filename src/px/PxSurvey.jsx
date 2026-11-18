@@ -27,9 +27,13 @@ function answered(value) {
   return value !== undefined && value !== null && value !== false;
 }
 
-function ScenePair({ art, maero, label }) {
+function ScenePair({ art, maero, label, name, scene }) {
   return (
     <figure className="px-scene">
+      <figcaption className="px-scene-cap">
+        <span className="px-scene-name">{name}</span>
+        <span className="px-scene-sub">{scene}</span>
+      </figcaption>
       <Img file={art} alt="" width={1152} height={778} />
       <Img file={maero} alt={label} width={900} height={800} />
     </figure>
@@ -274,10 +278,10 @@ export default function PxSurvey({ tracker, onProgress }) {
             {pageIndex === 1 && (
               <>
                 <PxVideo video={videos[0]} tracker={tracker} />
-                <ScenePair art="img/orig/postcard_water.jpg" maero="img/orig/maero_blue.png" label="물의 장면 속 블루 마에로" />
+                <ScenePair art="img/orig/postcard_water.jpg" maero="img/orig/maero_blue.png" label="물의 장면 속 블루 마에로" name="블루 마에로" scene="개막난장의 물 장면을 입은 마에로" />
                 {q("water")}
                 <PxVideo video={videos[1]} tracker={tracker} />
-                <ScenePair art="img/orig/postcard_fire.jpg" maero="img/orig/maero_red.png" label="불의 장면 속 레드 마에로" />
+                <ScenePair art="img/orig/postcard_fire.jpg" maero="img/orig/maero_red.png" label="불의 장면 속 레드 마에로" name="레드 마에로" scene="도깨비난장의 불 장면을 입은 마에로" />
                 {q("fire")}
                 {q("maero")}
                 {q("fit")}

@@ -22,7 +22,7 @@ function validAnswers() {
     before: 2,
     water: "maero",
     fire: "maero",
-    keepsakes: [],
+    keepsakes: ["keyring"],
     maero: "basic",
     fit: 4,
     price: "p7900",
