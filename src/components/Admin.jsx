@@ -413,43 +413,52 @@ function PublicSummary() {
   if (err) return <p className="helper">{err}</p>;
   if (!data) return <p className="helper">현황을 불러오는 중</p>;
 
-  const order = ["gender", "age", "region", "awareness", "souvenir", "before", "water", "fire", "maero", "fit", "keepsakes", "price"];
+  const order = ["fit", "before", "keepsakes", "price", "maero", "water", "fire", "souvenir", "awareness", "region", "age", "gender"];
   const short = {
     gender: "성별", age: "연령대", region: "거주 지역", awareness: "춘천마임축제 인지",
     souvenir: "최근 2년 기념품 구매 경험", before: "캐릭터 기념품 구매 의향", water: "개막난장 영상에서 마음에 든 점",
     fire: "도깨비난장 영상에서 마음에 든 점", maero: "가장 마음에 드는 마에로", fit: "장면과 캐릭터 어울림",
     keepsakes: "갖고 싶은 기념품(복수 선택)", price: "키링 지불 가능 금액"
   };
+  const optShort = {
+    region: { gangwon: "강원(춘천 외)", capital: "수도권", other: "그 외 지역" },
+    awareness: { never: "처음 들어봄", name: "이름만 앎", know: "어떤 축제인지 앎" },
+    souvenir: { yes: "있음", no: "없음" },
+    water: { join: "함께 뛰어놀고 싶음", watch: "시원한 장면", maero: "블루 마에로" },
+    fire: { join: "직접 느끼고 싶음", watch: "밤을 밝히는 장면", maero: "레드 마에로" },
+    price: { p9900: "9,900원 이상" },
+    before: { 1: "1점", 2: "2점", 3: "3점", 4: "4점", 5: "5점" },
+    fit: { 1: "1점", 2: "2점", 3: "3점", 4: "4점", 5: "5점" }
+  };
   const lastText = data.last
-    ? new Date(data.last).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })
+    ? new Date(data.last).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })
     : "없음";
   const total = data.total || 0;
   const cnt = (id, keys) => keys.reduce((a, k) => a + (data.counts?.[id]?.[k] || 0), 0);
-  const pctOf = (n) => (total ? Math.round((n / total) * 1000) / 10 : 0);
+  const pctOf = (n) => (total ? (Math.round((n / total) * 1000) / 10).toFixed(1) : "0.0");
   const kpis = [
-    { label: "전체 응답", value: `${total}명`, sub: `마지막 ${lastText}` },
-    { label: "장면과 캐릭터 어울림 4~5점", value: `${pctOf(cnt("fit", ["4", "5"]))}%`, sub: `${cnt("fit", ["4", "5"])}명` },
-    { label: "캐릭터 기념품 구매 의향 4~5점", value: `${pctOf(cnt("before", ["4", "5"]))}%`, sub: `${cnt("before", ["4", "5"])}명` },
-    { label: "키링을 갖고 싶다", value: `${pctOf(cnt("keepsakes", ["keyring"]))}%`, sub: `${cnt("keepsakes", ["keyring"])}명` },
-    { label: "키링 7,900원 이상도 괜찮다", value: `${pctOf(cnt("price", ["p7900", "p8900", "p9900"]))}%`, sub: `${cnt("price", ["p7900", "p8900", "p9900"])}명` }
+    { label: "전체 응답", value: `${total}명`, sub: `${lastText} 기준` },
+    { label: "장면 어울림(4~5점)", value: `${pctOf(cnt("fit", ["4", "5"]))}%`, sub: `${cnt("fit", ["4", "5"])}명` },
+    { label: "기념품 구매 의향(4~5점)", value: `${pctOf(cnt("before", ["4", "5"]))}%`, sub: `${cnt("before", ["4", "5"])}명` },
+    { label: "키링 선택", value: `${pctOf(cnt("keepsakes", ["keyring"]))}%`, sub: `${cnt("keepsakes", ["keyring"])}명` },
+    { label: "키링 7,900원 이상", value: `${pctOf(cnt("price", ["p7900", "p8900", "p9900"]))}%`, sub: `${cnt("price", ["p7900", "p8900", "p9900"])}명` }
   ];
 
   return (
     <section className="public-summary" aria-label="응답 현황">
-      <div className="ps-kpis">
+      <dl className="ps-kpis">
         {kpis.map((k) => (
           <div className="ps-kpi" key={k.label}>
-            <span className="ps-kpi-label">{k.label}</span>
-            <strong className="ps-kpi-value">{k.value}</strong>
-            <span className="ps-kpi-sub">{k.sub}</span>
+            <dt>{k.label}</dt>
+            <dd><strong>{k.value}</strong><span>{k.sub}</span></dd>
           </div>
         ))}
-      </div>
+      </dl>
       <div className="ps-grid">
         {order.map((id) => {
           const q = questions[id];
           const c = data.counts?.[id] || {};
-          const keys = q?.options ? q.options.map((o) => o.value) : q?.type === "scale" ? ["1", "2", "3", "4", "5"] : Object.keys(c).sort();
+          const keys = q?.options ? q.options.map((o) => o.value) : q?.type === "scale" ? ["5", "4", "3", "2", "1"] : Object.keys(c).sort();
           const base = q?.type === "checkbox" ? total || 1 : Object.values(c).reduce((a, b) => a + b, 0) || 1;
           const max = Math.max(1, ...keys.map((k) => c[k] || 0));
           return (
@@ -460,9 +469,10 @@ function PublicSummary() {
                 const pct = Math.round((n / base) * 100);
                 return (
                   <div className={`ps-row ${n === max && n > 0 ? "is-top" : ""}`} key={k}>
-                    <span className="ps-label">{answerLabel(id, k)}</span>
+                    <span className="ps-label">{optShort[id]?.[k] || answerLabel(id, k)}</span>
                     <span className="ps-bar"><span style={{ width: `${pct}%` }} /></span>
-                    <span className="ps-num">{pct}%<em>{n}</em></span>
+                    <span className="ps-pct">{pct}%</span>
+                    <span className="ps-n">{n}</span>
                   </div>
                 );
               })}
@@ -475,6 +485,7 @@ function PublicSummary() {
 }
 
 export default function Admin() {
+  const showRaw = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("raw") === "1";
   const [token, setToken] = useState("");
   const [records, setRecords] = useState([]);
   const [loaded, setLoaded] = useState(false);
@@ -619,13 +630,14 @@ export default function Admin() {
 
         <p>
           {isRemote
-            ? "문항별 현황은 바로 보이고, 응답 원문은 관리자 토큰으로 확인"
+            ? "2026 춘천마임축제 관객 설문 사이트 응답, 30초마다 자동 갱신"
             : "이 브라우저에 저장된 응답만 표시함. 다른 기기의 응답은 합산 제외임."}
         </p>
       </header>
 
       <PublicSummary />
 
+      {showRaw && (
       <form className="admin-login" onSubmit={load}>
         {isRemote && (
           <div className="input-group">
@@ -670,6 +682,7 @@ export default function Admin() {
           </p>
         )}
       </form>
+      )}
 
       {loaded && (
         <>
